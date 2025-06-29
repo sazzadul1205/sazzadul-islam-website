@@ -1,11 +1,88 @@
-import React from 'react';
+import React from "react";
+
+// Import Social Icons
+import gmail from "../../../public/SocialLogos/gmail.png";
+import facebook from "../../../public/SocialLogos/facebook.png";
+import github from "../../../public/SocialLogos/github.png";
+import twitter from "../../../public/SocialLogos/twitter.png";
+import linkedin from "../../../public/SocialLogos/linkedin.png";
+import Image from "next/image";
+import Link from "next/link";
 
 const About = () => {
-    return (
-        <div>
-            
+  return (
+    <div className="bg-white/80 min-h-screen px-6">
+      {/* Title */}
+      <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
+        About Me
+      </h3>
+
+      {/* Divider */}
+      <p className="bg-blue-500 w-10 py-1 mx-auto text-center rounded-full mb-6" />
+
+      {/* Main Description */}
+      <p className="text-center text-lg leading-8 max-w-4xl mx-auto text-gray-700 font-poppins">
+        I'm a passionate and self-motivated full stack web developer with a
+        strong interest in building efficient, scalable, and visually appealing
+        web applications. From crafting interactive frontend experiences to
+        handling backend logic and APIs, I enjoy working across the full
+        development stack.
+      </p>
+
+      {/* Detail Section */}
+      <div className="flex flex-col md:flex-row mx-auto max-w-7xl gap-8 mt-10 text-black">
+        {/* Personal Description */}
+        <div className="md:w-1/2 py-5">
+          <h2 className="text-2xl font-semibold font-poppins mb-4">
+            Get to know me!
+          </h2>
+
+          <p className="text-lg leading-7 text-gray-700 font-poppins">
+            I specialize in both frontend and backend technologies, working with
+            tools like React, Tailwind CSS, Node.js, Express, and MongoDB. I use{" "}
+            <span className="text-black font-semibold">GitHub</span> to manage
+            my projects, collaborate with others, and continuously refine my
+            code through version control.
+            <br />
+            <br />I believe in continuous learning and sharing. I'm actively
+            growing my knowledge and documenting what I learn to support others
+            in the dev community. You can find my projects and contributions on
+            GitHub, and I also share coding tips on{" "}
+            <span className="text-blue-600 hover:scale-105 underline cursor-pointer">
+              LinkedIn
+            </span>{" "}
+            and{" "}
+            <span className="text-pink-500 underline cursor-pointer">
+              GitHub
+            </span>
+            .
+            <br />
+            <br />
+            I'm open to internships, freelance projects, and junior full stack
+            roles. If you're looking for a developer who's eager to learn,
+            collaborate, and create — feel free to reach out!
+          </p>
+
+          <div className="flex items-center gap-2 pt-5">
+            <button className="px-14 py-3 bg-linear-to-bl hover:bg-linear-to-tr from-blue-500 to-blue-700 text-white font-semibold rounded-xl uppercase text-lg cursor-pointer font-poppins ">
+              Contact
+            </button>
+
+            <div>
+              <Link href={'/'} >
+                <Image src={gmail} alt="Logo" width={40} height={40} priority />
+              </Link>
+            </div>
+          </div>
         </div>
-    );
+
+        {/* Skills Placeholder */}
+        <div className="md:w-1/2 py-5">
+          {/* You can add skill icons, badges, or a progress section here */}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default About;
