@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 
 // Import Social Icons
@@ -8,6 +10,7 @@ import twitter from "../../../public/SocialLogos/twitter.png";
 import linkedin from "../../../public/SocialLogos/linkedin.png";
 import Image from "next/image";
 import Link from "next/link";
+import { Tooltip } from "react-tooltip";
 
 const About = () => {
   return (
@@ -68,17 +71,125 @@ const About = () => {
               Contact
             </button>
 
-            <div>
-              <Link href={'/'} >
-                <Image src={gmail} alt="Logo" width={40} height={40} priority />
-              </Link>
+            <div className="flex items-center gap-3">
+              {/* Gmail */}
+              <>
+                <Link
+                  href="mailto:Psazzadul@gmail.com"
+                  aria-label="Google"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="google-link"
+                >
+                  <Image
+                    src={gmail}
+                    alt="Logo"
+                    className="hover:scale-110 transition-transform"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </Link>
+
+                <Tooltip anchorSelect="#google-link" content="Email Me" />
+              </>
+
+              {/* Facebook */}
+              <>
+                <Link
+                  href="https://www.facebook.com/sazzadul.islam.pritom/"
+                  aria-label="Facebook"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="facebook-link"
+                >
+                  <Image
+                    src={facebook}
+                    alt="Logo"
+                    className="hover:scale-110 transition-transform"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </Link>
+
+                <Tooltip anchorSelect="#facebook-link" content="Message Me" />
+              </>
+
+              {/* Tweeter */}
+              <>
+                <Link
+                  href="https://x.com/sazzadu84352084"
+                  aria-label="x"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="x-link"
+                >
+                  <Image
+                    src={twitter}
+                    alt="Logo"
+                    className="hover:scale-110 transition-transform"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </Link>
+
+                <Tooltip anchorSelect="#x-link" content="Tweet Me" />
+              </>
+
+              {/* Tweeter */}
+              <>
+                <Link
+                  href="https://github.com/sazzadul1205"
+                  aria-label="GitHub"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="github-link"
+                >
+                  <Image
+                    src={github}
+                    alt="Logo"
+                    className="hover:scale-110 transition-transform"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </Link>
+
+                <Tooltip anchorSelect="#github-link" content="Help Me" />
+              </>
+
+              {/* Tweeter */}
+              <>
+                <Link
+                  href="https://www.linkedin.com/in/sazzadul-islam-molla-6905b3293/"
+                  aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id="linkedin-link"
+                >
+                  <Image
+                    src={linkedin}
+                    alt="Logo"
+                    className="hover:scale-110 transition-transform"
+                    width={40}
+                    height={40}
+                    priority
+                  />
+                </Link>
+
+                <Tooltip anchorSelect="#linkedin-link" content="Contact Me" />
+              </>
             </div>
           </div>
         </div>
 
         {/* Skills Placeholder */}
         <div className="md:w-1/2 py-5">
-          {/* You can add skill icons, badges, or a progress section here */}
+          <h2 className="text-2xl font-semibold font-poppins mb-4">
+            My Skills
+          </h2>
         </div>
       </div>
     </div>
