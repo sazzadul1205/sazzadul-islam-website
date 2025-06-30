@@ -1,3 +1,5 @@
+"use client";
+
 // data/projects.json
 const projects = [
   {
@@ -67,19 +69,53 @@ const projects = [
     description:
       "A simple yet effective task management application that helps users organize their tasks efficiently. It features task creation, editing, and deletion functionalities, along with a clean and responsive design to enhance productivity.",
     technologies: ["React", "Node.js", "MongoDB", "Tailwind CSS"],
-    image:"https://i.ibb.co/qJfV3nB/Web-Image4.png",
+    image: "https://i.ibb.co/qJfV3nB/Web-Image4.png",
     visit: "https://task-manager-ea274.web.app/",
     github: "https://github.com/sazzadul1205/Brand-shop-client",
   },
 ];
 
 // pages/projects/index.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+// icons
 import { FaExternalLinkAlt, FaGithub, FaInfoCircle } from "react-icons/fa";
 
+// Data
+import { getProjects } from "./getProjects";
+
 const Projects = () => {
+  const [projects, setProjects] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const Projects = await getProjects();
+
+        setProjects(Projects);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="bg-gradient-to-tr from-blue-500 to-purple-600 text-white min-h-screen flex justify-center items-center">
+        <p>Loading . . . . </p>
+      </div>
+    );
+  }
+
+  console.log("Projects Data:", projects);
+
   return (
     <div className="bg-white/80 min-h-screen px-6">
       <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
@@ -93,7 +129,7 @@ const Projects = () => {
       </p>
 
       <div className="max-w-7xl mx-auto pt-20 space-y-16">
-        {projects.map((project, index) => {
+        {/* {projects.map((project, index) => {
           const isEven = index % 2 === 0;
           return (
             <div
@@ -155,7 +191,7 @@ const Projects = () => {
               </div>
             </div>
           );
-        })}
+        })} */}
       </div>
     </div>
   );

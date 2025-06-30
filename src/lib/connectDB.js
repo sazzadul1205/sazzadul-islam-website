@@ -21,10 +21,12 @@ const connectDB = async () => {
     await client.connect();
     console.log("Connected to MongoDB Atlas");
 
-    db = client.db("Sazzadul-Islam-Website");
+    db = client.db("Sazzadul_Islam_Website");
     return db;
   } catch (error) {
     console.error("Failed to connect to MongoDB:", error.message);
     throw new Error("Database connection failed");
   }
 };
+
+export default connectDB;
