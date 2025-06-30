@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "ibb.co",
+        hostname: "i.ibb.co.com",
         port: "",
         pathname: "/**",
       },
