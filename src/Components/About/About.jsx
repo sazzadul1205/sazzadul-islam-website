@@ -14,7 +14,7 @@ import { Tooltip } from "react-tooltip";
 
 const About = () => {
   return (
-    <div className="bg-white/80 min-h-screen px-6">
+    <div className="bg-gray-200/80 min-h-screen px-6">
       {/* Title */}
       <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
         About Me
@@ -71,7 +71,7 @@ const About = () => {
               Contact
             </button>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 pl-5">
               {/* Gmail */}
               <>
                 <Link
@@ -219,7 +219,7 @@ const About = () => {
             ].map((skill) => (
               <span
                 key={skill}
-                className="group relative inline-block px-4 py-1 bg-gray-200 text-gray-700 text-lg font-medium rounded-md shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+                className="group relative inline-block px-4 py-1 bg-gray-200 text-gray-700 text-lg font-medium rounded-md shadow-md hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden"
               >
                 {/* Rainbow Glow Layer */}
                 <span className="absolute inset-0 rainbow-glow bg-size-shimmer bg-no-repeat opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-all duration-300 z-0 blur-sm rounded-md"></span>
