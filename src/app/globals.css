@@ -24,3 +24,32 @@ body {
 .font-poppins {
   font-family: var(--font-poppins);
 }
+
+
+.rainbow-glow {
+  background-image: linear-gradient(135deg,
+      #f87171,
+      #facc15,
+      #4ade80,
+      #38bdf8,
+      #c084fc);
+}
+
+.badge-glint::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      transparent 100%);
+  transform: rotate(25deg);
+  z-index: 1;
+}
+
+.group:hover .badge-glint::after {
+  animation: glint 1.2s ease-in-out forwards;
+}

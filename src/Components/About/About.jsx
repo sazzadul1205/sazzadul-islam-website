@@ -185,11 +185,55 @@ const About = () => {
           </div>
         </div>
 
-        {/* Skills Placeholder */}
+        {/* Skills Section */}
         <div className="md:w-1/2 py-5">
+          {/* Title */}
           <h2 className="text-2xl font-semibold font-poppins mb-4">
             My Skills
           </h2>
+
+          {/* Subtitle */}
+          <p className="text-gray-700 mb-4">
+            Technologies I’ve worked with while learning full stack development:
+          </p>
+
+          {/* Skill Badges */}
+          <div className="flex flex-wrap gap-5">
+            {[
+              "HTML5",
+              "CSS3",
+              "JavaScript",
+              "ReactJS",
+              "NextJS",
+              "NodeJS",
+              "ExpressJS",
+              "MongoDB",
+              "Tailwind",
+              "DaisyUI",
+              "Bootstrap",
+              "Vercel",
+              "Firebase",
+              "VueJS",
+              "MySQL",
+              "GitHub",
+            ].map((skill) => (
+              <span
+                key={skill}
+                className="group relative inline-block px-4 py-1 bg-gray-200 text-gray-700 text-lg font-medium rounded-md shadow-md transition-all duration-300 cursor-pointer overflow-hidden"
+              >
+                {/* Rainbow Glow Layer */}
+                <span className="absolute inset-0 rainbow-glow bg-size-shimmer bg-no-repeat opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-all duration-300 z-0 blur-sm rounded-md"></span>
+
+                {/* Glint Shine */}
+                <span className="badge-glint pointer-events-none absolute inset-0"></span>
+
+                {/* Skill Text */}
+                <span className="relative z-10 group-hover:text-white transition duration-200">
+                  {skill}
+                </span>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </div>
