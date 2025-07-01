@@ -5,8 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 
-import { getProjects } from "@/Components/Projects/getProjects";
-
 import {
   FaReact,
   FaNodeJs,
@@ -46,6 +44,7 @@ const ProjectDetailsPage = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log("Raw title param from URL:", title);
 
   useEffect(() => {
     if (!title) return;
@@ -56,23 +55,22 @@ const ProjectDetailsPage = () => {
 
     const fetchProject = async () => {
       try {
-        const cached = sessionStorage.getItem(`project-${title}`);
-
-        if (cached) {
-          setProject(JSON.parse(cached));
-          setLoading(false);
-          return;
-        }
-
-        const data = await getProjects(title);
-        const foundProject = Array.isArray(data) ? data[0] : data;
-        if (!foundProject) throw new Error("Project not found");
-
-        sessionStorage.setItem(
-          `project-${title}`,
-          JSON.stringify(foundProject)
+        const decodedTitle = decodeURIComponent(title);
+        const res = await fetch(
+          `/APIs/Projects?title=${encodeURIComponent(decodedTitle)}`
         );
-        setProject(foundProject);
+
+        if (!res.ok) {
+          if (res.status === 404) throw new Error("Project not found");
+          throw new Error("Failed to fetch project");
+        }
+        const data = await res.json();
+
+        // The API returns single object if queried by title
+        if (!data) throw new Error("Project not found");
+
+        sessionStorage.setItem(`project-${title}`, JSON.stringify(data));
+        setProject(data);
       } catch (err) {
         setError(err.message || "Failed to load project");
       } finally {

@@ -5,7 +5,6 @@ import Projects from "@/Components/Projects/Projects";
 import Contact from "@/Components/Contact/Contact";
 import About from "@/Components/About/About";
 import Hero from "@/Components/Hero/Hero";
-import { getProjects } from "@/Components/Projects/getProjects";
 
 export default function Home() {
   const [projectsData, setProjectsData] = useState([]);
@@ -15,11 +14,13 @@ export default function Home() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const data = await getProjects();
-        setProjectsData(data);
+        const res = await fetch("/APIs/Projects");
+        if (!res.ok) throw new Error("Failed to fetch projects");
+        const data = await res.json();
+        setProjectsData(Array.isArray(data) ? data : [data]);
       } catch (err) {
-        console.error("Error fetching projects:", err.message);
-        setError("Something went wrong while loading the page.");
+        console.error("Error fetching projects:", err.message || err);
+        setError("Something went wrong while loading the projects.");
       } finally {
         setLoading(false);
       }
@@ -28,7 +29,6 @@ export default function Home() {
     fetchProjects();
   }, []);
 
-  // Full-page loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100 text-lg text-gray-700">
@@ -37,10 +37,9 @@ export default function Home() {
     );
   }
 
-  // Full-page error state
   if (error) {
     return (
-      <div className="flex items-center justify-center h-screen bg-red-50 text-red-600 text-lg font-semibold">
+      <div className="flex items-center justify-center h-screen bg-red-50 text-red-600 text-lg font-semibold px-4 text-center">
         {error}
       </div>
     );
