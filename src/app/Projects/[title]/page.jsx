@@ -1,13 +1,36 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "next/navigation";
-import { getProjects } from "@/Components/Projects/getProjects";
-import Image from "next/image";
 
-import { FaReact, FaNodeJs, FaCss3Alt, FaTools } from "react-icons/fa";
-import { SiTailwindcss, SiMongodb } from "react-icons/si";
+// Next JS imports
+import Link from "next/link";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+
+// Fetch Projects Data
+import { getProjects } from "@/Components/Projects/getProjects";
+
+// Icons
+import {
+  FaReact,
+  FaNodeJs,
+  FaCss3Alt,
+  FaTools,
+  FaExternalLinkAlt,
+  FaGithub,
+  FaCcStripe,
+} from "react-icons/fa";
 import { MdBuild } from "react-icons/md";
+import { RiReactjsFill } from "react-icons/ri";
+import { SiTailwindcss, SiMongodb, SiDaisyui, SiExpress } from "react-icons/si";
+import {
+  FaUserShield,
+  FaUserTie,
+  FaUserGraduate,
+  FaUser,
+  FaEnvelope,
+  FaLock,
+} from "react-icons/fa";
 
 // Optional: icon mapping by tech name
 const techIcons = {
@@ -16,18 +39,27 @@ const techIcons = {
   "Tailwind CSS": <SiTailwindcss className="text-sky-400 w-5 h-5" />,
   MongoDB: <SiMongodb className="text-green-500 w-5 h-5" />,
   CSS: <FaCss3Alt className="text-blue-600 w-5 h-5" />,
+  DaisyUI: <SiDaisyui className="text-orange-600 w-5 h-5" />,
+  "Express.js": <SiExpress className="text-orange-600 w-5 h-5" />,
+  Stripe: <FaCcStripe className="text-blue-600 w-5 h-5" />,
+  ReactJs: <RiReactjsFill className="text-blue-600 w-5 h-5" />,
 };
 
 const ProjectDetailsPage = () => {
   const params = useParams();
+
+  // Extract title from URL parameters
   const { title } = params;
 
+  // State to hold project data, loading state, and error state
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Use a ref to track if data has been fetched once
   const fetchedOnce = useRef(false);
 
+  // Fetch project data based on title from URL
   useEffect(() => {
     if (!title || fetchedOnce.current) return;
 
@@ -35,7 +67,10 @@ const ProjectDetailsPage = () => {
       setLoading(true);
       setError(null);
       try {
+        // Check sessionStorage first for cached project data
         const cached = sessionStorage.getItem(`project-${title}`);
+
+        // If cached data exists, use it
         if (cached) {
           setProject(JSON.parse(cached));
           fetchedOnce.current = true;
@@ -43,10 +78,12 @@ const ProjectDetailsPage = () => {
           return;
         }
 
+        // If no cached data, fetch from API
         const data = await getProjects(title);
         const foundProject = Array.isArray(data) ? data[0] : data;
         if (!foundProject) throw new Error("Project not found");
 
+        // Store fetched project in sessionStorage
         sessionStorage.setItem(
           `project-${title}`,
           JSON.stringify(foundProject)
@@ -63,6 +100,7 @@ const ProjectDetailsPage = () => {
     fetchProject();
   }, [title]);
 
+  // Full-page loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen text-lg text-gray-600">
@@ -71,6 +109,7 @@ const ProjectDetailsPage = () => {
     );
   }
 
+  // Full-page error state
   if (error || !project) {
     return (
       <div className="flex items-center justify-center h-screen text-red-600 font-semibold">
@@ -137,41 +176,104 @@ const ProjectDetailsPage = () => {
           </section>
         )}
 
-        {/* Links */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-6">
-          {/* Visit Button */}
-          <Link
-            href={project?.visit}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-blue-300 to-blue-600 text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
-          >
-            <FaExternalLinkAlt className="text-lg" />
-            Visit
-          </Link>
+        {/* Links Section */}
+        <div className="flex flex-col md:flex-row justify-center items-center gap-4 py-6">
+          {/* Visit Live Site */}
+          {project?.visit && (
+            <Link
+              href={project.visit}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-linear-to-bl hover:bg-linear-to-tr from-green-300 to-green-600 text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-200"
+            >
+              <FaExternalLinkAlt className="text-sm" />
+              Live Site
+            </Link>
+          )}
 
-          {/* Front End GitHub Button */}
-          <Link
-            href={project?.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-gray-600 to-black text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
-          >
-            <FaGithub className="text-lg" />
-            Front End GitHub
-          </Link>
+          {/* Frontend GitHub */}
+          {project?.github && (
+            <Link
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-linear-to-bl hover:bg-linear-to-tr from-gray-900 to-black text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-200"
+            >
+              <FaGithub className="text-sm" />
+              Frontend Repo
+            </Link>
+          )}
 
-          {/* Back EndGitHub Button */}
-          <Link
-            href={project?.backend}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-gray-600 to-black text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
-          >
-            <FaGithub className="text-lg" />
-            Back End GitHub
-          </Link>
+          {/* Backend GitHub (optional) */}
+          {project?.backend && (
+            <Link
+              href={project.backend}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-linear-to-bl hover:bg-linear-to-tr from-gray-900 to-black text-white px-6 py-3 rounded-lg font-medium shadow-md transition-all duration-200"
+            >
+              <FaGithub className="text-sm" />
+              Backend Repo
+            </Link>
+          )}
         </div>
+
+        {/* Demo Accounts */}
+        {project.demo && (
+          <section className="max-w-7xl mx-auto p-8 border-t mt-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <FaUserShield className="text-blue-600" />
+              Demo Access
+            </h2>
+
+            {project.demo.instructions && (
+              <p className="text-gray-600 text-sm mb-6">
+                {project.demo.instructions}
+              </p>
+            )}
+
+            <div className="grid grid-cols-2 gap-6">
+              {Object.entries(project.demo).map(([role, creds]) => {
+                if (role === "instructions") return null;
+
+                // Optional role-based icon map
+                const roleIcons = {
+                  admin: <FaUserShield className="text-blue-600" />,
+                  trainer: <FaUserTie className="text-emerald-600" />,
+                  manager: <FaUserGraduate className="text-indigo-600" />,
+                  member: <FaUser className="text-pink-600" />,
+                };
+
+                return (
+                  <div
+                    key={role}
+                    className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition"
+                  >
+                    <div className="flex items-center gap-2 mb-3 text-lg font-semibold text-gray-800 capitalize">
+                      {roleIcons[role] || <FaUser className="text-gray-500" />}
+                      {role.replace(/([A-Z])/g, " $1")}
+                    </div>
+
+                    {typeof creds === "string" ? (
+                      <p className="text-sm text-gray-600">{creds}</p>
+                    ) : (
+                      <div className="space-y-1 text-sm text-gray-700">
+                        <p className="flex items-center gap-2">
+                          <FaEnvelope className="text-blue-500" />
+                          <span className="font-medium">{creds.email}</span>
+                        </p>
+                        <p className="flex items-center gap-2">
+                          <FaLock className="text-gray-600" />
+                          <span className="font-medium">{creds.password}</span>
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
       </div>
     </div>
   );
