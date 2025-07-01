@@ -1,6 +1,8 @@
-"use client";
-
 import React from "react";
+
+// Import Next.js components
+import Image from "next/image";
+import Link from "next/link";
 
 // Import Social Icons
 import gmail from "../../../public/SocialLogos/gmail.png";
@@ -8,8 +10,8 @@ import facebook from "../../../public/SocialLogos/facebook.png";
 import github from "../../../public/SocialLogos/github.png";
 import twitter from "../../../public/SocialLogos/twitter.png";
 import linkedin from "../../../public/SocialLogos/linkedin.png";
-import Image from "next/image";
-import Link from "next/link";
+
+// Packages
 import { Tooltip } from "react-tooltip";
 
 const About = () => {

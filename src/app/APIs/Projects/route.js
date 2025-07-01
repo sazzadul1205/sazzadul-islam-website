@@ -7,7 +7,7 @@ export const GET = async (req) => {
   const id = searchParams.get("id");
   const title = searchParams.get("title");
 
-  console.log("API called with:", { id, title });
+  // console.log("API called with:", { id, title });
 
   const db = await connectDB();
   const ProjectsCollection = db.collection("Projects");
