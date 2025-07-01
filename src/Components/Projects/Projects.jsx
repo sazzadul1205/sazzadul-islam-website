@@ -1,23 +1,31 @@
-"use client";
-
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
+// icons
 import { FaExternalLinkAlt, FaGithub, FaInfoCircle } from "react-icons/fa";
 
 const Projects = ({ projectsData }) => {
   const [showAll, setShowAll] = useState(false);
+
+  // Toggle function to show/hide extra projects
   const toggleShow = () => setShowAll((prev) => !prev);
 
+  // Split projects into two parts: first 4 always visible, rest hidden initially
   const baseProjects = projectsData.slice(0, 4);
   const extraProjects = projectsData.slice(4);
 
   return (
     <div className="bg-white/80 min-h-screen px-6 pb-16">
+      {/* Header Section */}
       <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
         Projects
       </h3>
+
+      {/* Decorative Line */}
       <p className="bg-blue-500 w-10 py-1 mx-auto rounded-full mb-6" />
+
+      {/* Intro Text */}
       <p className="text-center text-lg leading-8 max-w-4xl mx-auto text-gray-700 font-poppins">
         Here is some projects that I have worked on. Each project showcases my
         skills in web development, from frontend design to backend
@@ -55,6 +63,8 @@ const Projects = ({ projectsData }) => {
           })}
       </div>
 
+      {/* Show More/Less Button */}
+      {/* Only show if there are more than 4 projects */}
       {projectsData.length > 4 && (
         <div className="text-center mt-10">
           <button
@@ -85,6 +95,7 @@ const Projects = ({ projectsData }) => {
   );
 };
 
+// Project Card
 const ProjectCard = ({ project, isEven }) => {
   return (
     <div
@@ -92,7 +103,7 @@ const ProjectCard = ({ project, isEven }) => {
         isEven ? "flex-row" : "flex-row-reverse"
       } justify-between gap-20 group transition-transform duration-500`}
     >
-      {/* Image section */}
+      {/* Image Section */}
       <div className="p-2 bg-gray-300">
         <Image
           src={project.image}
@@ -103,17 +114,17 @@ const ProjectCard = ({ project, isEven }) => {
         />
       </div>
 
-      {/* Text section */}
+      {/* Text Section */}
       <div className="w-2/3">
-        {/* Only show title if it exists */}
+        {/* Titles */}
         <h3 className="text-2xl font-semibold text-gray-800 mb-4">
           {project.title}
         </h3>
 
-        {/* Only show description if it exists */}
+        {/* Description */}
         <p className="text-gray-600 text-lg mb-4">{project.description}</p>
 
-        {/* Only show tech stack if it exists */}
+        {/*  Technologies */}
         <p className="text-gray-600 mb-4">
           <span className="font-semibold">Technologies:</span>{" "}
           {project.technologies.join(", ")}
@@ -121,7 +132,7 @@ const ProjectCard = ({ project, isEven }) => {
 
         {/* Buttons */}
         <div className="flex flex-wrap gap-4 mt-4">
-          {/* Only show Details link if it exists */}
+          {/* Details Button */}
           <Link
             href={`/Projects/${encodeURIComponent(project.title)}`}
             className="flex items-center gap-2 bg-gradient-to-tr from-green-300 to-green-600 text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
@@ -130,7 +141,7 @@ const ProjectCard = ({ project, isEven }) => {
             Details
           </Link>
 
-          {/* Only show Visit link if it exists */}
+          {/* Visit Button */}
           <Link
             href={project.visit}
             target="_blank"
@@ -141,7 +152,7 @@ const ProjectCard = ({ project, isEven }) => {
             Visit
           </Link>
 
-          {/* Only show GitHub link if it exists */}
+          {/* GitHub Button */}
           <Link
             href={project.github}
             target="_blank"

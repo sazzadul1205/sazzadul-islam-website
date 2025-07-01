@@ -28,7 +28,7 @@ export default function Home() {
     fetchProjects();
   }, []);
 
-  // 🔴 Full-page loading state
+  // Full-page loading state
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100 text-lg text-gray-700">
@@ -37,7 +37,7 @@ export default function Home() {
     );
   }
 
-  // 🔴 Full-page error state
+  // Full-page error state
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen bg-red-50 text-red-600 text-lg font-semibold">
