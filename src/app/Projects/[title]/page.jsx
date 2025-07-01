@@ -140,7 +140,7 @@ const ProjectDetailsPage = () => {
         </p>
       </div>
 
-      <div className="bg-linear-to-b from-white-90 to-white/50">
+      <div className="bg-linear-to-b from-white/10 to-white">
         {/* Image */}
         <div className="rounded-xl max-w-7xl mx-auto overflow-hidden shadow-lg mb-10">
           <Image
@@ -221,19 +221,19 @@ const ProjectDetailsPage = () => {
         {/* Demo Accounts */}
         {project.demo && (
           <section className="max-w-7xl mx-auto p-8 border-t mt-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 flex justify-center items-center gap-2">
               <FaUserShield className="text-blue-600" />
               Demo Access
             </h2>
 
             {project.demo.instructions && (
-              <p className="text-gray-600 text-sm mb-6">
+              <p className="text-gray-600 text-center font-semibold mb-6">
                 {project.demo.instructions}
               </p>
             )}
 
             <div className="grid grid-cols-2 gap-6">
-              {Object.entries(project.demo).map(([role, creds]) => {
+              {Object.entries(project.demo).map(([role, cred]) => {
                 if (role === "instructions") return null;
 
                 // Optional role-based icon map
@@ -247,24 +247,24 @@ const ProjectDetailsPage = () => {
                 return (
                   <div
                     key={role}
-                    className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition"
+                    className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-2xl transition"
                   >
                     <div className="flex items-center gap-2 mb-3 text-lg font-semibold text-gray-800 capitalize">
                       {roleIcons[role] || <FaUser className="text-gray-500" />}
                       {role.replace(/([A-Z])/g, " $1")}
                     </div>
 
-                    {typeof creds === "string" ? (
-                      <p className="text-sm text-gray-600">{creds}</p>
+                    {typeof cred === "string" ? (
+                      <p className="text-sm text-gray-600">{cred}</p>
                     ) : (
                       <div className="space-y-1 text-sm text-gray-700">
                         <p className="flex items-center gap-2">
                           <FaEnvelope className="text-blue-500" />
-                          <span className="font-medium">{creds.email}</span>
+                          <span className="font-medium">{cred.email}</span>
                         </p>
                         <p className="flex items-center gap-2">
                           <FaLock className="text-gray-600" />
-                          <span className="font-medium">{creds.password}</span>
+                          <span className="font-medium">{cred.password}</span>
                         </p>
                       </div>
                     )}
@@ -273,6 +273,63 @@ const ProjectDetailsPage = () => {
               })}
             </div>
           </section>
+        )}
+
+        {/* Features by Role */}
+        {project.features && (
+          <section className="max-w-7xl mx-auto">
+            <div className="text-center mb-8">
+              
+              
+
+              <h2 className="text-3xl font-extrabold text-gray-800 flex justify-center items-center gap-3">
+                <span className="text-indigo-600 text-4xl">📦</span>
+                <span>Features by Role</span>
+              </h2>
+              <p className="text-gray-500 font-semibold mt-2 max-w-xl mx-auto">
+                Each user role has access to distinct features tailored to their
+                responsibilities and permissions within the system.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {Object.entries(project.features).map(([role, features]) => (
+                <div
+                  key={role}
+                  className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-all duration-200"
+                >
+                  <h3 className="text-xl font-semibold text-indigo-700 mb-4 capitalize flex items-center gap-2">
+                    <span className="inline-block w-2.5 h-2.5 bg-indigo-500 rounded-full" />
+                    {role}
+                  </h3>
+                  <ul className="space-y-2 text-gray-700 text-sm list-inside list-disc">
+                    {features.map((feature, i) => (
+                      <li key={i} className="leading-relaxed">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Project Objectives */}
+        {project.objectives && (
+          <div className="px-6 py-12 border-t text-center bg-white/60 rounded-xl shadow-sm mt-12 max-w-4xl mx-auto">
+            <h2 className="text-3xl font-extrabold text-gray-800 mb-6 flex justify-center items-center gap-3">
+              <span className="text-blue-600 text-4xl">🎯</span>
+              <span>Project Objectives</span>
+            </h2>
+            <ul className="list-disc list-inside text-gray-700 space-y-3 text-base inline-block text-left mx-auto">
+              {project.objectives.map((obj, i) => (
+                <li key={i} className="leading-relaxed">
+                  {obj}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
