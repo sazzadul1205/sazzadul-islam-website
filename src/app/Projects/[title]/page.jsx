@@ -24,6 +24,7 @@ import {
 import { MdBuild } from "react-icons/md";
 import { RiReactjsFill } from "react-icons/ri";
 import { SiTailwindcss, SiMongodb, SiDaisyui, SiExpress } from "react-icons/si";
+import Loader from "@/Shared/Loader/Loader";
 
 const techIcons = {
   ReactJs: <RiReactjsFill className="text-blue-600 w-5 h-5" />,
@@ -82,11 +83,7 @@ const ProjectDetailsPage = () => {
   }, [title]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen text-lg text-gray-600">
-        Loading...
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error || !project) {

@@ -1,10 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
+// Components
 import Projects from "@/Components/Projects/Projects";
 import Contact from "@/Components/Contact/Contact";
 import About from "@/Components/About/About";
 import Hero from "@/Components/Hero/Hero";
+import DragonCursor from "@/Components/DragonCursor/DragonCursor";
+import Loader from "@/Shared/Loader/Loader";
 
 export default function Home() {
   const [projectsData, setProjectsData] = useState([]);
@@ -43,11 +47,7 @@ export default function Home() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gray-100 text-lg text-gray-700">
-        Loading...
-      </div>
-    );
+    return <Loader />;
   }
 
   if (error) {
@@ -61,24 +61,25 @@ export default function Home() {
   // ✅ Normal page render
   return (
     <div
-      className="bg-fixed bg-cover bg-center min-h-screen"
+      className="bg-fixed bg-cover bg-center min-h-screen cursor-none"
       style={{
         backgroundImage: "url('/WhiteWallpaper.jpg')",
       }}
     >
-      <section id="home">
+      <DragonCursor />
+      <section className="cursor-none" id="home">
         <Hero />
       </section>
 
-      <section id="about">
+      <section className="cursor-none" id="about">
         <About aboutData={aboutData} />
       </section>
 
-      <section id="projects">
+      <section className="cursor-none" id="projects">
         <Projects projectsData={projectsData} />
       </section>
 
-      <section id="contacts">
+      <section className="cursor-none" id="contacts">
         <Contact />
       </section>
     </div>

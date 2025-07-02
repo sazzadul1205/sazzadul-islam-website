@@ -1,33 +1,50 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-// icons
+// Icons
 import { FaExternalLinkAlt, FaGithub, FaInfoCircle } from "react-icons/fa";
 
 const Projects = ({ projectsData }) => {
   const [showAll, setShowAll] = useState(false);
 
-  // Toggle function to show/hide extra projects
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true });
+  }, []);
+
   const toggleShow = () => setShowAll((prev) => !prev);
 
-  // Split projects into two parts: first 4 always visible, rest hidden initially
   const baseProjects = projectsData.slice(0, 4);
   const extraProjects = projectsData.slice(4);
 
   return (
     <div className="bg-white/80 min-h-screen px-6 pb-16">
       {/* Header Section */}
-      <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
+      <h3
+        className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans"
+        data-aos="zoom-in"
+      >
         Projects
       </h3>
 
       {/* Decorative Line */}
-      <p className="bg-blue-500 w-10 py-1 mx-auto rounded-full mb-6" />
+      <p
+        className="bg-blue-500 w-10 py-1 mx-auto rounded-full mb-6"
+        data-aos="zoom-in"
+        data-aos-delay="100"
+      />
 
       {/* Intro Text */}
-      <p className="text-center text-lg leading-8 max-w-4xl mx-auto text-gray-700 font-poppins">
-        Here is some projects that I have worked on. Each project showcases my
+      <p
+        className="text-center text-lg leading-8 max-w-4xl mx-auto text-gray-700 font-poppins"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        Here are some projects that I have worked on. Each one showcases my
         skills in web development, from frontend design to backend
         functionality. Feel free to explore them!
       </p>
@@ -36,26 +53,30 @@ const Projects = ({ projectsData }) => {
         {/* First 4 always visible */}
         {baseProjects.map((project, index) => {
           const isEven = index % 2 === 0;
+          const direction = isEven ? "fade-right" : "fade-left";
           return (
-            <ProjectCard
-              key={project.id || project.title + index}
-              project={project}
-              isEven={isEven}
-            />
+            <div
+              key={project.id || index}
+              data-aos={direction}
+              data-aos-delay={index * 100}
+            >
+              <ProjectCard project={project} isEven={isEven} />
+            </div>
           );
         })}
 
-        {/* Show rest with delay and fade */}
+        {/* Extra projects on toggle */}
         {showAll &&
           extraProjects.map((project, index) => {
-            const isEven = (index + 4) % 2 === 0;
-            const delay = `${index * 0.2}s`; // ⏱️ Delay increases per card
+            const actualIndex = index + 4;
+            const isEven = actualIndex % 2 === 0;
+            const direction = isEven ? "fade-right" : "fade-left";
 
             return (
               <div
-                key={project.id || project.title + "-extra-" + index}
-                className="fade-in"
-                style={{ animationDelay: delay }}
+                key={project.id || `extra-${index}`}
+                data-aos={direction}
+                data-aos-delay={index * 100}
               >
                 <ProjectCard project={project} isEven={isEven} />
               </div>
@@ -64,9 +85,8 @@ const Projects = ({ projectsData }) => {
       </div>
 
       {/* Show More/Less Button */}
-      {/* Only show if there are more than 4 projects */}
       {projectsData.length > 4 && (
-        <div className="text-center mt-10">
+        <div className="text-center mt-10" data-aos="zoom-in-up">
           <button
             onClick={toggleShow}
             className="bg-gradient-to-tr from-purple-400 to-purple-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
@@ -75,27 +95,11 @@ const Projects = ({ projectsData }) => {
           </button>
         </div>
       )}
-
-      {/* 🔽 Scoped animation styles */}
-      <style jsx>{`
-        .fade-in {
-          opacity: 0;
-          transform: translateY(20px);
-          animation: fadeInCard 0.6s ease-out forwards;
-        }
-
-        @keyframes fadeInCard {
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 };
 
-// Project Card
+// Project Card Component
 const ProjectCard = ({ project, isEven }) => {
   return (
     <div
@@ -116,23 +120,19 @@ const ProjectCard = ({ project, isEven }) => {
 
       {/* Text Section */}
       <div className="w-2/3">
-        {/* Titles */}
         <h3 className="text-2xl font-semibold text-gray-800 mb-4">
           {project.title}
         </h3>
 
-        {/* Description */}
         <p className="text-gray-600 text-lg mb-4">{project.description}</p>
 
-        {/*  Technologies */}
         <p className="text-gray-600 mb-4">
           <span className="font-semibold">Technologies:</span>{" "}
           {project.technologies.join(", ")}
         </p>
 
-        {/* Buttons */}
+        {/* Action Buttons */}
         <div className="flex flex-wrap gap-4 mt-4">
-          {/* Details Button */}
           <Link
             href={`/Projects/${encodeURIComponent(project.title)}`}
             className="flex items-center gap-2 bg-gradient-to-tr from-green-300 to-green-600 text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
@@ -141,7 +141,6 @@ const ProjectCard = ({ project, isEven }) => {
             Details
           </Link>
 
-          {/* Visit Button */}
           <Link
             href={project.visit}
             target="_blank"
@@ -152,7 +151,6 @@ const ProjectCard = ({ project, isEven }) => {
             Visit
           </Link>
 
-          {/* GitHub Button */}
           <Link
             href={project.github}
             target="_blank"

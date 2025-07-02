@@ -1,8 +1,11 @@
-// ContactForm.jsx
-import React, { useState } from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const ContactForm = () => {
   const {
@@ -11,6 +14,10 @@ const ContactForm = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
+
+  useEffect(() => {
+    AOS.init({ duration: 800, once: true });
+  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -22,40 +29,53 @@ const ContactForm = () => {
           from_email: data.email,
           message: data.message,
           to_name: "Sazzadul Islam",
-          to_email: "Psazzadul@gmail.com", 
+          to_email: "Psazzadul@gmail.com",
         },
         "2E4m6SmAxA_qFfFN9"
       );
+
       reset();
+
       Swal.fire({
         icon: "success",
         title: "Message Sent!",
         text: "Thanks for reaching out. I’ll get back to you soon.",
-        confirmButtonColor: "#3b82f6", // Tailwind blue-500
+        confirmButtonColor: "#3b82f6",
       });
     } catch (error) {
       console.error("Email send failed:", error);
+
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong. Please try again later.",
-        confirmButtonColor: "#ef4444", // Tailwind red-500
+        confirmButtonColor: "#ef4444",
       });
     }
   };
 
   return (
-    <div className="min-h-screen px-6">
+    <div className="min-h-screen px-6 py-10">
       {/* Title */}
-      <h3 className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins">
+      <h3
+        className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins"
+        data-aos="fade-up"
+      >
         Contact
       </h3>
 
       {/* Divider */}
-      <div className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6" />
+      <div
+        className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6"
+        data-aos="zoom-in"
+      />
 
       {/* Description */}
-      <p className="text-center text-lg leading-8 max-w-2xl mx-auto text-gray-700 font-poppins">
+      <p
+        className="text-center text-lg leading-8 max-w-2xl mx-auto text-gray-700 font-poppins"
+        data-aos="fade-up"
+        data-aos-delay="100"
+      >
         Feel free to contact me by submitting the form below. I’ll get back to
         you as soon as possible.
       </p>
@@ -64,6 +84,8 @@ const ContactForm = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl w-full mx-auto p-8 bg-white shadow-lg rounded-lg mt-10 text-black"
+        data-aos="fade-up"
+        data-aos-delay="200"
       >
         {/* Name */}
         <div className="mb-5">
@@ -137,7 +159,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-linear-to-bl hover:bg-linear-to-tr from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded transition-all duration-200 disabled:opacity-50 cursor-pointer disabled:hover:bg-blue-600"
+          className="w-full bg-gradient-to-br from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold py-3 px-4 rounded transition-all duration-200 disabled:opacity-50 cursor-pointer disabled:hover:bg-blue-600"
         >
           {isSubmitting ? "Sending..." : "Send Message"}
         </button>
