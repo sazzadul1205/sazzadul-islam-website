@@ -35,7 +35,7 @@ const About = () => {
       </p>
 
       {/* Detail Section */}
-      <div className="flex flex-col md:flex-row mx-auto max-w-7xl gap-8 mt-10 text-black">
+      <div className="flex flex-col md:flex-row mx-auto max-w-7xl gap-16 mt-10 text-black">
         {/* Personal Description */}
         <div className="md:w-1/2 py-5">
           <h2 className="text-2xl font-semibold font-poppins mb-4">
