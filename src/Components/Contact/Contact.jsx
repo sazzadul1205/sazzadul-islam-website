@@ -49,7 +49,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="min-h-screen px-6 py-10">
+    <div className="min-h-screen md:px-6 md:py-10">
       {/* Title */}
       <h3 className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins">
         Contact
@@ -67,7 +67,7 @@ const ContactForm = () => {
       {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-4xl w-full mx-auto p-8 bg-white shadow-lg rounded-lg mt-10 text-black"
+        className="max-w-4xl w-full mx-auto p-5 md:p-8 bg-white shadow-lg rounded-lg mt-10 text-black"
       >
         {/* Name */}
         <div className="mb-5">

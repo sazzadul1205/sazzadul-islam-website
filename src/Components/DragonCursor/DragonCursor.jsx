@@ -37,7 +37,7 @@ const DragonCursor = () => {
   return (
     <div
       ref={dragonRef}
-      className="fixed top-0 left-0 z-[9999] pointer-events-none w-16 h-16 animate-float text-black"
+      className="hidden md:fixed top-0 left-0 z-[9999] pointer-events-none w-16 h-16 animate-float text-black"
     >
       <FaPlus />
     </div>

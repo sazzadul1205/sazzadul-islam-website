@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { Typewriter } from "react-simple-typewriter";
 
-
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -14,7 +13,7 @@ const Hero = () => {
 
   return (
     <div
-      className="flex items-center justify-center bg-white/40 min-h-screen px-4 cursor-default"
+      className="flex md:items-center md:justify-center bg-white/40 md:min-h-screen px-4 pt-[100px] md:pt-0 cursor-default"
       data-aos="fade-up"
     >
       <div className="text-center space-y-5">

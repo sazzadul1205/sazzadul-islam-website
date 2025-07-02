@@ -67,7 +67,7 @@ export default function Home() {
       }}
     >
       <DragonCursor />
-      <section className="cursor-none" id="home">
+      <section className="cursor-none " id="home">
         <Hero />
       </section>
 

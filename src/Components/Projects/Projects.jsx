@@ -39,7 +39,7 @@ const Projects = ({ projectsData }) => {
   const extraProjects = sortedProjects.slice(4);
 
   return (
-    <div className="bg-white/80 min-h-screen px-6 pb-16">
+    <div className="bg-white/80 min-h-screen px-4 md:px-6 pb-16">
       {/* Header Section */}
       <h3
         className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans"
@@ -106,7 +106,7 @@ const Projects = ({ projectsData }) => {
         <div className="text-center mt-10" data-aos="zoom-in-up">
           <button
             onClick={toggleShow}
-            className="bg-gradient-to-tr from-purple-400 to-purple-700 text-white px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
+            className="bg-gradient-to-tr from-purple-400 to-purple-700 text-white px-2 md:px-8 py-2 md:py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
           >
             {showAll ? "Show Less" : "Show More"}
           </button>
@@ -120,30 +120,32 @@ const Projects = ({ projectsData }) => {
 const ProjectCard = ({ project, isEven }) => {
   return (
     <div
-      className={`flex ${
-        isEven ? "flex-row" : "flex-row-reverse"
-      } justify-between gap-20 group transition-transform duration-500`}
+      className={`flex flex-col ${
+        isEven ? "md:flex-row" : "md:flex-row-reverse"
+      } items-center justify-between gap-10 md:gap-16 group transition-transform duration-500`}
     >
       {/* Image Section */}
-      <div className="p-2 bg-gray-300">
+      <div className="w-full md:w-1/2 p-2 bg-gray-300 rounded-lg shadow-lg">
         <Image
           src={project.image}
           alt={project.title}
           width={1000}
           height={1000}
-          className="rounded-lg shadow-lg"
+          className="rounded-lg object-cover"
         />
       </div>
 
       {/* Text Section */}
-      <div className="w-2/3">
+      <div className="w-full md:w-1/2">
         <h3 className="text-2xl font-semibold text-gray-800 mb-4">
           {project.title}
         </h3>
 
-        <p className="text-gray-600 text-lg mb-4">{project.description}</p>
+        <p className="text-gray-600 text-base md:text-lg mb-4">
+          {project.description}
+        </p>
 
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600 mb-4 text-sm md:text-base">
           <span className="font-semibold">Technologies:</span>{" "}
           {project.technologies.join(", ")}
         </p>
@@ -152,9 +154,9 @@ const ProjectCard = ({ project, isEven }) => {
         <div className="flex flex-wrap gap-4 mt-4">
           <Link
             href={`/Projects/${encodeURIComponent(project.title)}`}
-            className="flex items-center gap-2 bg-gradient-to-tr from-green-300 to-green-600 text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
+            className="flex items-center gap-2 bg-gradient-to-tr from-green-300 to-green-600 text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
-            <FaInfoCircle className="text-lg" />
+            <FaInfoCircle />
             Details
           </Link>
 
@@ -162,9 +164,9 @@ const ProjectCard = ({ project, isEven }) => {
             href={project.visit}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-blue-300 to-blue-600 text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
+            className="flex items-center gap-2 bg-gradient-to-tr from-blue-300 to-blue-600 text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
-            <FaExternalLinkAlt className="text-lg" />
+            <FaExternalLinkAlt />
             Visit
           </Link>
 
@@ -172,9 +174,9 @@ const ProjectCard = ({ project, isEven }) => {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-gray-600 to-black text-white font-semibold px-10 py-3 rounded-2xl transition duration-200"
+            className="flex items-center gap-2 bg-gradient-to-tr from-gray-600 to-black text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
-            <FaGithub className="text-lg" />
+            <FaGithub />
             GitHub
           </Link>
         </div>
