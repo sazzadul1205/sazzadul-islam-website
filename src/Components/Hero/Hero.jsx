@@ -1,13 +1,15 @@
 "use client";
-    
+
 import React from "react";
 
 // Packages
 import { Typewriter } from "react-simple-typewriter";
+import SplashCursor from "../../../app/page.js/SplashCursor/SplashCursor";
 
 const Hero = () => {
   return (
     <div className="flex items-center justify-center bg-white/40 min-h-screen px-4 cursor-default">
+      <SplashCursor />
       <div className="text-center space-y-5 ">
         {/* Title */}
         <h1 className="text-5xl font-bold text-black mb-4">
