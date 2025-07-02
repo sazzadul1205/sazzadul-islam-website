@@ -44,7 +44,7 @@ const ProjectDetailsPage = () => {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  console.log("Raw title param from URL:", title);
+  // console.log("Raw title param from URL:", title);
 
   useEffect(() => {
     if (!title) return;
@@ -107,7 +107,8 @@ const ProjectDetailsPage = () => {
       {/* Back Button */}
       <button
         onClick={() => router.push("/")}
-        className="fixed top-32 left-6 z-50 flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-blue-600 bg-white border border-gray-200 px-4 py-2 rounded-lg shadow hover:shadow-md transition duration-200 cursor-pointer "
+        className="fixed top-32 left-6 z-50 flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-blue-600 bg-white border border-gray-200 px-4 py-2 rounded-lg shadow 
+        hover:shadow-md transition duration-200 cursor-pointer"
         aria-label="Go back to home"
       >
         <FaArrowLeft className="text-sm" />

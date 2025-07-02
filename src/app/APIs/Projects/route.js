@@ -41,7 +41,7 @@ export const GET = async (req) => {
       result = await ProjectsCollection.find().toArray();
     }
 
-    console.log("Mongo query result:", result);
+    // console.log("Mongo query result:", result);
 
     return NextResponse.json(result);
   } catch (error) {

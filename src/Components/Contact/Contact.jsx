@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
+import Swal from "sweetalert2";
 
 const ContactForm = () => {
   const {
@@ -11,10 +12,7 @@ const ContactForm = () => {
     formState: { errors, isSubmitting },
   } = useForm();
 
-  const [status, setStatus] = useState(null); // "success" | "error"
-
   const onSubmit = async (data) => {
-    setStatus(null);
     try {
       await emailjs.send(
         "service_rrexxzy",
@@ -23,34 +21,46 @@ const ContactForm = () => {
           from_name: data.name,
           from_email: data.email,
           message: data.message,
-          to_name: "Sazzadul",
+          to_name: "Sazzadul Islam",
+          to_email: "Psazzadul@gmail.com", 
         },
         "2E4m6SmAxA_qFfFN9"
       );
-      setStatus("success");
       reset();
+      Swal.fire({
+        icon: "success",
+        title: "Message Sent!",
+        text: "Thanks for reaching out. I’ll get back to you soon.",
+        confirmButtonColor: "#3b82f6", // Tailwind blue-500
+      });
     } catch (error) {
       console.error("Email send failed:", error);
-      setStatus("error");
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong. Please try again later.",
+        confirmButtonColor: "#ef4444", // Tailwind red-500
+      });
     }
   };
 
   return (
     <div className="min-h-screen px-6">
       {/* Title */}
-      <h3 className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans">
+      <h3 className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins">
         Contact
       </h3>
 
       {/* Divider */}
-      <p className="bg-blue-500 w-10 py-1 mx-auto text-center rounded-full mb-6" />
+      <div className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6" />
 
-      {/* Main Description */}
+      {/* Description */}
       <p className="text-center text-lg leading-8 max-w-2xl mx-auto text-gray-700 font-poppins">
-        Feel free to Contact me by submitting the form below and I will get back
-        to you as soon as possible
+        Feel free to contact me by submitting the form below. I’ll get back to
+        you as soon as possible.
       </p>
 
+      {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl w-full mx-auto p-8 bg-white shadow-lg rounded-lg mt-10 text-black"
@@ -108,8 +118,8 @@ const ContactForm = () => {
           </label>
           <textarea
             id="message"
-            {...register("message", { required: "Message is required" })}
             rows="6"
+            {...register("message", { required: "Message is required" })}
             className={`w-full px-4 py-2 border rounded resize-none focus:outline-none focus:ring-2 ${
               errors.message
                 ? "border-red-400 ring-red-300"
@@ -127,7 +137,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition-all duration-200 disabled:opacity-50"
+          className="w-full bg-linear-to-bl hover:bg-linear-to-tr from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded transition-all duration-200 disabled:opacity-50 cursor-pointer disabled:hover:bg-blue-600"
         >
           {isSubmitting ? "Sending..." : "Send Message"}
         </button>
