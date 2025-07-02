@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
-import AOS from "aos";
-import "aos/dist/aos.css";
 
 const ContactForm = () => {
   const {
@@ -14,10 +12,6 @@ const ContactForm = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true });
-  }, []);
 
   const onSubmit = async (data) => {
     try {
@@ -57,25 +51,15 @@ const ContactForm = () => {
   return (
     <div className="min-h-screen px-6 py-10">
       {/* Title */}
-      <h3
-        className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins"
-        data-aos="fade-up"
-      >
+      <h3 className="text-4xl uppercase font-semibold text-center text-black pt-16 pb-3 font-poppins">
         Contact
       </h3>
 
       {/* Divider */}
-      <div
-        className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6"
-        data-aos="zoom-in"
-      />
+      <div className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6" />
 
       {/* Description */}
-      <p
-        className="text-center text-lg leading-8 max-w-2xl mx-auto text-gray-700 font-poppins"
-        data-aos="fade-up"
-        data-aos-delay="100"
-      >
+      <p className="text-center text-lg leading-8 max-w-2xl mx-auto text-gray-700 font-poppins">
         Feel free to contact me by submitting the form below. I’ll get back to
         you as soon as possible.
       </p>
@@ -84,8 +68,6 @@ const ContactForm = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="max-w-4xl w-full mx-auto p-8 bg-white shadow-lg rounded-lg mt-10 text-black"
-        data-aos="fade-up"
-        data-aos-delay="200"
       >
         {/* Name */}
         <div className="mb-5">

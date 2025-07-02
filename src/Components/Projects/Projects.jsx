@@ -18,8 +18,25 @@ const Projects = ({ projectsData }) => {
 
   const toggleShow = () => setShowAll((prev) => !prev);
 
-  const baseProjects = projectsData.slice(0, 4);
-  const extraProjects = projectsData.slice(4);
+  // Sort projects by 'view' property
+  const sortedProjects = [...projectsData].sort((a, b) => {
+    const aHasView = typeof a.view === "number";
+    const bHasView = typeof b.view === "number";
+
+    if (aHasView && bHasView) {
+      return a.view - b.view; // Ascending order of view
+    }
+    if (aHasView) {
+      return -1; // a comes before b
+    }
+    if (bHasView) {
+      return 1; // b comes before a
+    }
+    return 0; // both don't have view, keep original order relative to each other
+  });
+
+  const baseProjects = sortedProjects.slice(0, 4);
+  const extraProjects = sortedProjects.slice(4);
 
   return (
     <div className="bg-white/80 min-h-screen px-6 pb-16">
