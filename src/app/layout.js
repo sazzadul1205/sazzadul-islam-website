@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased cursor-none`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased `}
       >
         <Navbar />
         <main className="min-h-screen bg-gray-400"> {children} </main>

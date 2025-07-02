@@ -6,9 +6,8 @@ import { useState, useEffect } from "react";
 import Projects from "@/Components/Projects/Projects";
 import Contact from "@/Components/Contact/Contact";
 import About from "@/Components/About/About";
-import Hero from "@/Components/Hero/Hero";
-import DragonCursor from "@/Components/DragonCursor/DragonCursor";
 import Loader from "@/Shared/Loader/Loader";
+import Hero from "@/Components/Hero/Hero";
 
 export default function Home() {
   const [projectsData, setProjectsData] = useState([]);
@@ -61,25 +60,24 @@ export default function Home() {
   // ✅ Normal page render
   return (
     <div
-      className="bg-fixed bg-cover bg-center min-h-screen cursor-none"
+      className="bg-fixed bg-cover bg-center min-h-screen "
       style={{
         backgroundImage: "url('/WhiteWallpaper.jpg')",
       }}
     >
-      <DragonCursor />
-      <section className="cursor-none " id="home">
+      <section id="home">
         <Hero />
       </section>
 
-      <section className="cursor-none" id="about">
+      <section id="about">
         <About aboutData={aboutData} />
       </section>
 
-      <section className="cursor-none" id="projects">
+      <section id="projects">
         <Projects projectsData={projectsData} />
       </section>
 
-      <section className="cursor-none" id="contacts">
+      <section id="contacts">
         <Contact />
       </section>
     </div>
