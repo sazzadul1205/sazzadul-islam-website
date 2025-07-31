@@ -51,8 +51,13 @@ const renderAboutDescription = (descArray) =>
   });
 
 const About = ({ aboutData }) => {
+  // Initialize AOS for animations
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({
+      duration: 1000,
+      once: true,
+      disable: () => window.innerWidth < 768, // disable on mobile view
+    });
   }, []);
 
   return (

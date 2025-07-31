@@ -7,8 +7,13 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 const Hero = () => {
+  // Initialize AOS for animations
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true }); // once: true prevents animation from repeating
+    AOS.init({
+      duration: 1000,
+      once: true,
+      disable: () => window.innerWidth < 768, // disable on mobile view
+    });
   }, []);
 
   return (
