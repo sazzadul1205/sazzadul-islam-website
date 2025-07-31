@@ -1,8 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
+// Next.js components
 import Image from "next/image";
 import Link from "next/link";
+
+// AOS for animations
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -10,10 +14,16 @@ import "aos/dist/aos.css";
 import { FaExternalLinkAlt, FaGithub, FaInfoCircle } from "react-icons/fa";
 
 const Projects = ({ projectsData }) => {
+  // State to manage showing all projects
   const [showAll, setShowAll] = useState(false);
 
+  // Initialize AOS for animations
   useEffect(() => {
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({
+      duration: 1000,
+      once: true,
+      disable: () => window.innerWidth < 768, // disable on mobile view
+    });
   }, []);
 
   const toggleShow = () => setShowAll((prev) => !prev);
@@ -35,6 +45,7 @@ const Projects = ({ projectsData }) => {
     return 0; // both don't have view, keep original order relative to each other
   });
 
+  // Split projects into two parts
   const baseProjects = sortedProjects.slice(0, 4);
   const extraProjects = sortedProjects.slice(4);
 
