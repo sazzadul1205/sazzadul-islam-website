@@ -16,7 +16,7 @@ const Hero = () => {
       className="flex md:items-center md:justify-center bg-white/40 md:min-h-screen px-4 pt-[100px] md:pt-0 cursor-default"
       data-aos="fade-up"
     >
-      <div className="text-center space-y-5">
+      <div className="text-center space-y-5 pt-12 md:pt-0">
         {/* Title */}
         <h1 className="text-5xl font-bold text-black mb-4" data-aos="zoom-in">
           Hi, I'm Sazzadul Islam
@@ -35,7 +35,7 @@ const Hero = () => {
 
         {/* Typewriter */}
         <h3
-          className="text-2xl font-semibold font-poppins text-gray-700 mt-4"
+          className="text-2xl font-semibold font-poppins text-gray-700 mt-4 h-[60px] sm:h-auto"
           data-aos="fade-up"
           data-aos-delay="200"
         >
@@ -67,7 +67,7 @@ const Hero = () => {
               const section = document.getElementById("projects");
               section?.scrollIntoView({ behavior: "smooth" });
             }}
-            className="px-24 py-4 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold rounded-xl uppercase text-xl cursor-pointer"
+            className="px-20 md:px-24 py-3 md:py-4 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold rounded-xl uppercase text-xl cursor-pointer"
           >
             Projects
           </button>

@@ -85,7 +85,7 @@ const Navbar = () => {
             className="rounded-full border-2 border-blue-500"
             priority
           />
-          <p className="text-lg font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300 font-poppins">
+          <p className="whitespace-nowrap text-lg font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300 font-poppins">
             Sazzadul Islam
           </p>
         </div>
