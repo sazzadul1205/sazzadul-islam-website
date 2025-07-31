@@ -102,16 +102,14 @@ const Projects = ({ projectsData }) => {
       </div>
 
       {/* Show More/Less Button */}
-      {projectsData.length > 4 && (
-        <div className="text-center mt-10" data-aos="zoom-in-up">
-          <button
-            onClick={toggleShow}
-            className="bg-gradient-to-tr from-purple-400 to-purple-700 text-white px-2 md:px-8 py-2 md:py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition-transform duration-300"
-          >
-            {showAll ? "Show Less" : "Show More"}
-          </button>
-        </div>
-      )}
+      <div className="w-full flex justify-center mt-20">
+        <button
+          onClick={toggleShow}
+          className="flex items-center justify-center gap-2 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold w-[200px] py-3 rounded-xl text-sm md:text-base transition duration-200 cursor-pointer"
+        >
+          {showAll ? "Show Less" : "Show More"}
+        </button>
+      </div>
     </div>
   );
 };
@@ -154,7 +152,7 @@ const ProjectCard = ({ project, isEven }) => {
         <div className="flex flex-wrap gap-4 mt-4">
           <Link
             href={`/Projects/${encodeURIComponent(project.title)}`}
-            className="flex items-center gap-2 bg-gradient-to-tr from-green-300 to-green-600 text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
+            className="flex items-center justify-center gap-2 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold w-[120px] py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
             <FaInfoCircle />
             Details
@@ -164,7 +162,7 @@ const ProjectCard = ({ project, isEven }) => {
             href={project.visit}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-blue-300 to-blue-600 text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
+            className="flex items-center justify-center gap-2 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold w-[120px] py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
             <FaExternalLinkAlt />
             Visit
@@ -174,7 +172,7 @@ const ProjectCard = ({ project, isEven }) => {
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-tr from-gray-600 to-black text-white font-semibold px-6 py-2 rounded-xl text-sm md:text-base transition duration-200"
+            className="flex items-center justify-center gap-2 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-semibold w-[120px] py-2 rounded-xl text-sm md:text-base transition duration-200"
           >
             <FaGithub />
             GitHub

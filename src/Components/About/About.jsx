@@ -98,7 +98,7 @@ const About = ({ aboutData }) => {
           </p>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-5 pt-5">
-            <button className="px-8 py-3 text-white text-sm sm:text-base bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl font-semibold uppercase font-poppins w-full md:w-fit">
+            <button className="px-10 py-3 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-medium rounded-xl uppercase text-md cursor-pointer">
               Contact
             </button>
 

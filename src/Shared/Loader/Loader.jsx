@@ -6,9 +6,10 @@ const Loader = () => {
   return (
     <div
       id="pre-load"
-      className="bg-fixed bg-cover bg-center min-h-screen loader"
+      className="bg-fixed bg-cover bg-center min-h-screen"
       style={{
         backgroundImage: "url('/WhiteWallpaper.jpg')",
+        backgroundSize: "cover",
       }}
     >
       <div className="loader-inner">

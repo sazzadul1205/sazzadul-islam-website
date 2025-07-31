@@ -57,7 +57,6 @@ export default function Home() {
     );
   }
 
-  // ✅ Normal page render
   return (
     <div
       className="bg-fixed bg-cover bg-center min-h-screen "
