@@ -145,7 +145,7 @@ const Hero = () => {
                 .getElementById("projects")
                 ?.scrollIntoView({ behavior: "smooth" })
             }
-            className="relative px-10 md:px-20 py-3 md:py-3 bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full uppercase md:text-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:w-0 before:h-full before:bg-white/20 before:transition-all before:duration-500 hover:before:w-full cursor-pointer"
+            className="relative px-10 md:px-20 py-3 md:py-3 bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full uppercase  md:text-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden before:absolute before:top-0 before:left-0 before:w-0 before:h-full before:bg-white/20 before:transition-all before:duration-500 hover:before:w-full cursor-pointer before:z-[-1]"
           >
             Projects
           </button>

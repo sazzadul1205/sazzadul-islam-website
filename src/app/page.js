@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Head from "next/head";
 
 // Components
 import Projects from "@/Components/Projects/Projects";
@@ -18,7 +19,6 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch both in parallel
         const [projectsRes, aboutRes] = await Promise.all([
           fetch("/APIs/Projects"),
           fetch("/APIs/About"),
@@ -33,7 +33,7 @@ export default function Home() {
         setProjectsData(
           Array.isArray(projectsData) ? projectsData : [projectsData]
         );
-        setAboutData(aboutData); // ✅ You need to define this state
+        setAboutData(aboutData);
       } catch (err) {
         console.error("Error fetching data:", err.message || err);
         setError("Something went wrong while loading the content.");
@@ -45,9 +45,7 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   if (error) {
     return (
@@ -58,27 +56,27 @@ export default function Home() {
   }
 
   return (
-    <div
-      className="bg-fixed bg-cover bg-center min-h-screen "
-      style={{
-        backgroundImage: "url('/WhiteWallpaper.jpg')",
-      }}
-    >
-      <section id="home">
-        <Hero />
-      </section>
+    <>
+      <div
+        className="bg-fixed bg-cover bg-center min-h-screen"
+        style={{ backgroundImage: "url('/WhiteWallpaper.jpg')" }}
+      >
+        <section id="home">
+          <Hero />
+        </section>
 
-      <section id="about">
-        <About aboutData={aboutData} />
-      </section>
+        <section id="about">
+          <About aboutData={aboutData} />
+        </section>
 
-      <section id="projects">
-        <Projects projectsData={projectsData} />
-      </section>
+        <section id="projects">
+          <Projects projectsData={projectsData} />
+        </section>
 
-      <section id="contacts">
-        <Contact />
-      </section>
-    </div>
+        <section id="contacts">
+          <Contact />
+        </section>
+      </div>
+    </>
   );
 }
