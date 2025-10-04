@@ -14,17 +14,25 @@ import "aos/dist/aos.css";
 import { FaExternalLinkAlt, FaGithub, FaInfoCircle } from "react-icons/fa";
 
 const Projects = ({ projectsData }) => {
-  // State to manage showing all projects
   const [showAll, setShowAll] = useState(false);
 
-  // Initialize AOS for animations
+  // Initialize AOS
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      disable: () => window.innerWidth < 768, // disable on mobile view
-    });
+    const timeout = setTimeout(() => {
+      AOS.init({
+        duration: 1000,
+        once: true,
+        disable: () => window.innerWidth < 768,
+      });
+    }, 100);
+
+    return () => clearTimeout(timeout);
   }, []);
+
+  // Refresh AOS whenever showAll changes (dynamic content)
+  useEffect(() => {
+    AOS.refresh();
+  }, [showAll]);
 
   const toggleShow = () => setShowAll((prev) => !prev);
 
@@ -33,25 +41,19 @@ const Projects = ({ projectsData }) => {
     const aHasView = typeof a.view === "number";
     const bHasView = typeof b.view === "number";
 
-    if (aHasView && bHasView) {
-      return a.view - b.view; // Ascending order of view
-    }
-    if (aHasView) {
-      return -1; // a comes before b
-    }
-    if (bHasView) {
-      return 1; // b comes before a
-    }
-    return 0; // both don't have view, keep original order relative to each other
+    if (aHasView && bHasView) return a.view - b.view;
+    if (aHasView) return -1;
+    if (bHasView) return 1;
+    return 0;
   });
 
-  // Split projects into two parts
+  // Split projects into always-visible and extra projects
   const baseProjects = sortedProjects.slice(0, 4);
   const extraProjects = sortedProjects.slice(4);
 
   return (
     <div className="bg-white/80 min-h-screen px-4 md:px-6 pb-16">
-      {/* Header Section */}
+      {/* Header */}
       <h3
         className="uppercase text-center font-semibold font-poppins text-black py-3 pt-16 text-4xl font-sans"
         data-aos="zoom-in"
@@ -59,14 +61,12 @@ const Projects = ({ projectsData }) => {
         Projects
       </h3>
 
-      {/* Decorative Line */}
       <p
         className="bg-blue-500 w-10 py-1 mx-auto rounded-full mb-6"
         data-aos="zoom-in"
         data-aos-delay="100"
       />
 
-      {/* Intro Text */}
       <p
         className="text-center text-lg leading-8 max-w-4xl mx-auto text-gray-700 font-poppins"
         data-aos="fade-up"
@@ -78,7 +78,7 @@ const Projects = ({ projectsData }) => {
       </p>
 
       <div className="max-w-7xl mx-auto pt-20 space-y-16">
-        {/* First 4 always visible */}
+        {/* Base Projects */}
         {baseProjects.map((project, index) => {
           const isEven = index % 2 === 0;
           const direction = isEven ? "fade-right" : "fade-left";
@@ -86,14 +86,14 @@ const Projects = ({ projectsData }) => {
             <div
               key={project.id || index}
               data-aos={direction}
-              data-aos-delay={index * 100}
+              data-aos-delay={index * 150} // stagger nicely
             >
               <ProjectCard project={project} isEven={isEven} />
             </div>
           );
         })}
 
-        {/* Extra projects on toggle */}
+        {/* Extra Projects (shown on toggle) */}
         {showAll &&
           extraProjects.map((project, index) => {
             const actualIndex = index + 4;
@@ -104,7 +104,7 @@ const Projects = ({ projectsData }) => {
               <div
                 key={project.id || `extra-${index}`}
                 data-aos={direction}
-                data-aos-delay={index * 100}
+                data-aos-delay={index * 150} // stagger nicely
               >
                 <ProjectCard project={project} isEven={isEven} />
               </div>
@@ -112,7 +112,7 @@ const Projects = ({ projectsData }) => {
           })}
       </div>
 
-      {/* Show More/Less Button */}
+      {/* Show More / Show Less Button */}
       <div className="w-full flex justify-center mt-20">
         <button
           onClick={toggleShow}

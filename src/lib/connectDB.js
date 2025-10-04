@@ -5,9 +5,9 @@ let db;
 const connectDB = async () => {
   if (db) return db;
 
-  try {
-    const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
+  const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
 
+  try {
     const client = new MongoClient(uri, {
       ssl: true,
       serverApi: {
@@ -15,16 +15,32 @@ const connectDB = async () => {
         strict: true,
         deprecationErrors: true,
       },
-      tlsAllowInvalidCertificates: true, // Allows invalid certificates (if needed for development)
+      tlsAllowInvalidCertificates: true,
     });
 
     await client.connect();
-    console.log("Connected to MongoDB Atlas");
-
+    console.log("✅ Connected to MongoDB Atlas");
     db = client.db("Sazzadul_Islam_Website");
     return db;
   } catch (error) {
-    console.error("Failed to connect to MongoDB:", error.message);
+    // Detailed error handling
+    if (error.message.includes("authentication")) {
+      console.error("❌ Authentication failed: Check username/password");
+    } else if (
+      error.message.includes("ENOTFOUND") ||
+      error.message.includes("ECONNREFUSED")
+    ) {
+      console.error(
+        "❌ Network error: Cannot reach MongoDB Atlas. Check IP whitelist or network"
+      );
+    } else if (
+      error.message.includes("TLS") ||
+      error.message.includes("certificate")
+    ) {
+      console.error("❌ TLS/SSL error: Certificate problem");
+    } else {
+      console.error("❌ Unknown error:", error.message);
+    }
     throw new Error("Database connection failed");
   }
 };

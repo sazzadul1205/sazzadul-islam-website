@@ -85,7 +85,7 @@ const Navbar = () => {
             className="rounded-full border-2 border-blue-500"
             priority
           />
-          <p className="whitespace-nowrap text-lg font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300 font-poppins">
+          <p className="whitespace-nowrap text-lg font-semibold text-gray-800 hover:text-blue-800 transition-colors duration-300 font-poppins cursor-default">
             Sazzadul Islam
           </p>
         </div>
@@ -94,14 +94,13 @@ const Navbar = () => {
       <div className="navbar-end hidden lg:flex">
         <ul className="flex gap-14 font-poppins font-semibold">
           {links.map(({ name, href }) => (
-            <li key={href}>
+            <li key={href} className="relative">
               <a
                 href={href}
-                className={`transition-colors duration-300 ${
-                  activeLink === href
-                    ? "text-blue-600"
-                    : "text-gray-800 hover:text-blue-600"
-                }`}
+                className={` relative text-gray-800 hover:text-blue-600 after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full ${
+                  activeLink === href ? "text-blue-600 after:w-full" : ""
+                }
+        `}
               >
                 {name}
               </a>
