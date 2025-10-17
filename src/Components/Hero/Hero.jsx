@@ -72,7 +72,7 @@ const Hero = () => {
   const floatingIcons = useMemo(() => generateFloatingIcons(40), []);
 
   return (
-    <div className="relative flex md:items-center md:justify-center bg-white/40 md:min-h-screen px-4 pt-[100px] md:pt-0 cursor-default overflow-hidden">
+    <div className="relative flex md:items-center md:justify-center bg-white/10 md:min-h-screen px-4 pt-[100px] md:pt-0 cursor-default overflow-hidden">
       {/* Floating Icons */}
       {floatingIcons.map(
         (
@@ -97,7 +97,7 @@ const Hero = () => {
       )}
 
       {/* Content */}
-      <div className="text-center space-y-5 pt-12 md:pt-0 relative z-10">
+      <div className="text-center space-y-5 pt-12 md:pt-0 relative z-10 bg-gray-200/30">
         <h1 className="text-5xl font-bold text-black mb-4" data-aos="zoom-in">
           Hi, I'm Sazzadul Islam
         </h1>

@@ -136,11 +136,19 @@ const ProjectCard = ({ project, isEven }) => {
       {/* Image Section */}
       <div className="w-full md:w-1/2 p-2 bg-gray-300 rounded-lg shadow-lg">
         <Image
-          src={project.image}
-          alt={project.title}
+          src={
+            project.image ||
+            "https://via.placeholder.com/1000x600.png?text=No+Image+Available"
+          }
+          alt={project.title || "Project Image"}
           width={1000}
           height={1000}
           className="rounded-lg object-cover"
+          onError={(e) => {
+            e.currentTarget.onerror = null;
+            e.currentTarget.src =
+              "https://via.placeholder.com/1000x600.png?text=No+Image+Available";
+          }}
         />
       </div>
 

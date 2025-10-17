@@ -8,7 +8,7 @@ const Loader = () => {
       id="pre-load"
       className="bg-fixed bg-cover bg-center min-h-screen"
       style={{
-        backgroundImage: "url('/WhiteWallpaper.jpg')",
+        backgroundImage: "url('/OffWhite.jpg')",
         backgroundSize: "cover",
       }}
     >

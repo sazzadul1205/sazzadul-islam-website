@@ -1,9 +1,9 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/Shared/Navbar";
 import Footer from "@/Shared/Footer";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 
+// Font configs
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,6 +19,7 @@ const poppins = Poppins({
   weight: ["400", "600"],
   variable: "--font-poppins",
 });
+
 export const metadata = {
   title: "Sazzadul Islam | Full Stack Developer",
   description:
@@ -34,7 +35,7 @@ export const metadata = {
     siteName: "Sazzadul Islam",
     images: [
       {
-        url: "/logo.png", // Replace with a proper OG image
+        url: "/logo.png",
         width: 1200,
         height: 630,
         alt: "Sazzadul Islam Logo",
@@ -54,12 +55,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased `}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
+        suppressHydrationWarning
       >
         <Navbar />
-        <main className="min-h-screen bg-gray-400"> {children} </main>
+        <main className="min-h-screen bg-gray-400">{children}</main>
         <Footer />
       </body>
     </html>

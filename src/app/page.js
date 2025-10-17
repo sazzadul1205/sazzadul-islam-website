@@ -59,7 +59,7 @@ export default function Home() {
     <>
       <div
         className="bg-fixed bg-cover bg-center min-h-screen"
-        style={{ backgroundImage: "url('/WhiteWallpaper.jpg')" }}
+        style={{ backgroundImage: "url('/OffWhite.jpg')" }}
       >
         <section id="home">
           <Hero />
