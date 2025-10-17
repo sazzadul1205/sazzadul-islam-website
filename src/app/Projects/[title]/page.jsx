@@ -98,7 +98,7 @@ const ProjectDetailsPage = () => {
     <div
       className="relative bg-fixed bg-cover bg-center min-h-screen"
       style={{
-        backgroundImage: "url('/WhiteWallpaper.jpg')",
+        backgroundImage: "url('/OffWhite.jpg')",
       }}
     >
       {/* Back Button */}
