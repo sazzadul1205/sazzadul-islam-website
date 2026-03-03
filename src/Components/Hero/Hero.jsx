@@ -131,7 +131,6 @@ const Hero = () => {
             delay,
             duration,
             opacity,
-            rotateDirection,
             xMove,
             yMove,
           },
@@ -348,6 +347,7 @@ const Hero = () => {
             { icon: FaGithub, href: "https://github.com/sazzadulislam", color: "text-gray-800" },
             { icon: FaLaravel, href: "#", color: "text-red-600" },
             { icon: FaReact, href: "#", color: "text-blue-500" },
+            { icon: SiNextdotjs, href: "#", color: "text-black" },
           ].map((social, index) => (
             <motion.a
               key={index}

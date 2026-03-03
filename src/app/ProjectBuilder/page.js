@@ -86,8 +86,10 @@ const deleteProject = async (id) => {
   return response.json();
 };
 
+// Find this function around line 90 and replace it:
 const reorderProjects = async (projects) => {
-  const response = await fetch("/api/Projects", {
+  const response = await fetch("/api/Projects?action=reorder", {
+    // Added ?action=reorder
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ projects }),

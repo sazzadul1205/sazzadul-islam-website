@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
+import { useQuery } from "@tanstack/react-query";
 
 // Critical components (loaded immediately)
 import Hero from "@/Components/Hero/Hero";
@@ -15,7 +16,7 @@ const About = dynamic(() => import("@/Components/About/About"), {
       aria-label="Loading about section"
     />
   ),
-  ssr: false, // Disable SSR for better client-side performance
+  ssr: false,
 });
 
 const Projects = dynamic(() => import("@/Components/Projects/Projects"), {
@@ -38,6 +39,27 @@ const Contact = dynamic(() => import("@/Components/Contact/Contact"), {
   ssr: false,
 });
 
+// API functions
+const fetchProjects = async () => {
+  const response = await fetch("/api/Projects", {
+    headers: {
+      "Cache-Control": "max-age=3600",
+    },
+  });
+  if (!response.ok) throw new Error("Failed to fetch projects");
+  return response.json();
+};
+
+const fetchAbout = async () => {
+  const response = await fetch("/api/About", {
+    headers: {
+      "Cache-Control": "max-age=3600",
+    },
+  });
+  if (!response.ok) throw new Error("Failed to fetch about data");
+  return response.json();
+};
+
 // Custom hook for intersection observer
 const useIntersectionObserver = (options = {}) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -48,12 +70,12 @@ const useIntersectionObserver = (options = {}) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.disconnect(); // Clean up after visibility
+          observer.disconnect();
         }
       },
       {
         threshold: 0.1,
-        rootMargin: "200px", // Load slightly before entering viewport
+        rootMargin: "200px",
         ...options,
       },
     );
@@ -101,7 +123,6 @@ const BackgroundImage = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Check if mobile for background attachment optimization
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -109,7 +130,6 @@ const BackgroundImage = ({ children }) => {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
-    // Preload background image
     const img = new window.Image();
     img.src = "/OffWhite.jpg";
     img.onload = () => setBgLoaded(true);
@@ -119,7 +139,6 @@ const BackgroundImage = ({ children }) => {
 
   return (
     <div className="relative min-h-screen">
-      {/* Background image with progressive loading */}
       <div
         className={`fixed inset-0 bg-cover bg-center transition-opacity duration-1000 ${
           bgLoaded ? "opacity-100" : "opacity-0"
@@ -130,14 +149,12 @@ const BackgroundImage = ({ children }) => {
         }}
       />
 
-      {/* Fallback background while loading */}
       <div
         className={`fixed inset-0 bg-gray-100 dark:bg-gray-900 transition-opacity duration-1000 ${
           bgLoaded ? "opacity-0" : "opacity-100"
         }`}
       />
 
-      {/* Content */}
       <div className="relative z-10">{children}</div>
     </div>
   );
@@ -187,70 +204,43 @@ const BackToTop = () => {
 };
 
 export default function Home() {
-  const [projectsData, setProjectsData] = useState([]);
-  const [aboutData, setAboutData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [dataLoaded, setDataLoaded] = useState(false);
+  // Fetch projects with TanStack Query
+  const {
+    data: projectsData = [],
+    isLoading: projectsLoading,
+    error: projectsError,
+    isSuccess: projectsSuccess,
+  } = useQuery({
+    queryKey: ["projects"],
+    queryFn: fetchProjects,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
 
-  // Fetch data with caching
-  useEffect(() => {
-    let isMounted = true;
+  // Fetch about data with TanStack Query
+  const {
+    data: aboutData,
+    isLoading: aboutLoading,
+    error: aboutError,
+    isSuccess: aboutSuccess,
+  } = useQuery({
+    queryKey: ["about"],
+    queryFn: fetchAbout,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
 
-    const fetchData = async () => {
-      try {
-        // Add cache control headers
-        const [projectsRes, aboutRes] = await Promise.all([
-          fetch("/api/Projects", {
-            headers: {
-              "Cache-Control": "max-age=3600",
-            },
-          }),
-          fetch("/api/About", {
-            headers: {
-              "Cache-Control": "max-age=3600",
-            },
-          }),
-        ]);
+  // Combined loading state
+  const isLoading = projectsLoading || aboutLoading;
+  const error = projectsError || aboutError;
+  const dataLoaded = projectsSuccess && aboutSuccess;
 
-        if (!projectsRes.ok) throw new Error("Failed to fetch projects");
-        if (!aboutRes.ok) throw new Error("Failed to fetch about data");
-
-        const projectsData = await projectsRes.json();
-        const aboutData = await aboutRes.json();
-
-        if (isMounted) {
-          setProjectsData(
-            Array.isArray(projectsData) ? projectsData : [projectsData],
-          );
-          setAboutData(aboutData);
-          setDataLoaded(true);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err.message || err);
-        if (isMounted) {
-          setError("Something went wrong while loading the content.");
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    fetchData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  if (loading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   if (error) {
     return (
       <div className="flex items-center justify-center h-screen bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-lg font-semibold px-4 text-center">
-        {error}
+        {error.message || "Something went wrong while loading the content."}
       </div>
     );
   }
