@@ -43,22 +43,23 @@ import {
   FaArrowDown,
   FaSpinner,
   FaExclamationTriangle,
+  FaLock,
+  FaUnlock,
 } from "react-icons/fa";
-import { FiSearch } from "react-icons/fi";
+import { FiSearch, FiEye, FiEyeOff } from "react-icons/fi";
 
 // sweetalert
 import Swal from "sweetalert2";
 
 // API functions
 const fetchProjects = async () => {
-  const response = await fetch("/APIs/Projects");
+  const response = await fetch("/api/Projects");
   if (!response.ok) throw new Error("Failed to fetch projects");
   return response.json();
 };
 
 const updateProject = async (project) => {
-  const response = await fetch(`/APIs/Projects?id=${project._id}`, {
-    // Changed this line
+  const response = await fetch(`/api/Projects?id=${project._id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(project),
@@ -68,7 +69,7 @@ const updateProject = async (project) => {
 };
 
 const createProject = async (project) => {
-  const response = await fetch("/APIs/Projects", {
+  const response = await fetch("/api/Projects", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(project),
@@ -78,8 +79,7 @@ const createProject = async (project) => {
 };
 
 const deleteProject = async (id) => {
-  const response = await fetch(`/APIs/Projects?id=${id}`, {
-    // Changed this line
+  const response = await fetch(`/api/Projects?id=${id}`, {
     method: "DELETE",
   });
   if (!response.ok) throw new Error("Failed to delete project");
@@ -87,13 +87,190 @@ const deleteProject = async (id) => {
 };
 
 const reorderProjects = async (projects) => {
-  const response = await fetch("/APIs/Projects", {
+  const response = await fetch("/api/Projects", {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ projects }),
   });
   if (!response.ok) throw new Error("Failed to reorder projects");
   return response.json();
+};
+
+// Password Modal Component
+const PasswordModal = ({ isOpen, onClose, onSuccess }) => {
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [attempts, setAttempts] = useState(0);
+
+  // Get passwords from environment variables
+  const validPasswords = [
+    process.env.NEXT_PUBLIC_ADMIN_PASSWORD_1,
+    process.env.NEXT_PUBLIC_ADMIN_PASSWORD_2,
+  ].filter(Boolean); // Remove any undefined values
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (validPasswords.includes(password)) {
+      setError("");
+      setPassword("");
+      setAttempts(0);
+      onSuccess();
+    } else {
+      setError("Invalid password. Please try again.");
+      setAttempts((prev) => prev + 1);
+
+      // Clear error after 3 seconds
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25,
+      },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 0.2 },
+    },
+  };
+
+  const overlayVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <div className="text-black">
+          {/* Blurred Backdrop */}
+          <motion.div
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="fixed inset-0 z-50"
+            style={{ backdropFilter: "blur(8px)" }}
+          >
+            <div className="absolute inset-0 bg-black/40" />
+          </motion.div>
+
+          {/* Modal */}
+          <motion.div
+            variants={modalVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          >
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative border border-gray-200">
+              {/* Lock Icon */}
+              <div className="absolute -top-6 left-1/2 transform -translate-x-1/2">
+                <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-full shadow-lg">
+                  <FaLock className="w-8 h-8 text-white" />
+                </div>
+              </div>
+
+              {/* Header */}
+              <div className="text-center mt-6 mb-8">
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                  Protected Area
+                </h2>
+                <p className="text-gray-600">
+                  Enter your password to access the Project Builder
+                </p>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 pr-12"
+                      placeholder="Enter password"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    >
+                      {showPassword ? (
+                        <FiEyeOff className="w-5 h-5" />
+                      ) : (
+                        <FiEye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Error Message */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="text-red-600 text-sm flex items-center gap-2"
+                    >
+                      <FaExclamationTriangle className="w-4 h-4" />
+                      {error}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+
+                {/* Attempts indicator (optional) */}
+                {attempts > 0 && (
+                  <p className="text-xs text-gray-500">
+                    Failed attempts: {attempts}/5
+                  </p>
+                )}
+
+                {/* Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors font-medium"
+                  >
+                    Unlock
+                  </button>
+                </div>
+              </form>
+
+              {/* Hint (optional) */}
+              <p className="text-xs text-center text-gray-400 mt-4">
+                Contact administrator if you forgot the password
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 // Sortable Project Card Component
@@ -604,12 +781,13 @@ const ProjectForm = ({ project, onSave, onCancel }) => {
 
 // Main ProjectBuilder Component
 const ProjectBuilder = () => {
+  const [isLocked, setIsLocked] = useState(true);
+  const [showPasswordModal, setShowPasswordModal] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
 
-  // Use fetchedProjects directly instead of local state
   const queryClient = useQueryClient();
 
   // Fetch projects with TanStack Query
@@ -620,6 +798,7 @@ const ProjectBuilder = () => {
   } = useQuery({
     queryKey: ["projects"],
     queryFn: fetchProjects,
+    enabled: !isLocked, // Only fetch when unlocked
   });
 
   // Mutations
@@ -680,7 +859,7 @@ const ProjectBuilder = () => {
     }),
   );
 
-  // Handle drag end - use projects directly from query
+  // Handle drag end
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
@@ -739,6 +918,12 @@ const ProjectBuilder = () => {
     }
   };
 
+  // Handle successful unlock
+  const handleUnlock = () => {
+    setIsLocked(false);
+    setShowPasswordModal(false);
+  };
+
   // Filter projects
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -748,6 +933,36 @@ const ProjectBuilder = () => {
       filterStatus === "all" || project.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
+
+  // Show password modal when locked
+  if (isLocked) {
+    return (
+      <>
+        <PasswordModal
+          isOpen={showPasswordModal}
+          onClose={() => {
+            // Redirect to home or show message when cancelled
+            window.location.href = "/";
+          }}
+          onSuccess={handleUnlock}
+        />
+
+        {/* Blurred background content */}
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-4 md:px-6 text-black py-30 filter blur-sm">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+              <h1 className="text-4xl font-bold text-gray-800 mb-2">
+                Project Builder
+              </h1>
+              <p className="text-gray-600">
+                Manage, reorder, and customize your portfolio projects
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -775,14 +990,20 @@ const ProjectBuilder = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-4 md:px-6 text-black py-30">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Project Builder
-          </h1>
-          <p className="text-gray-600">
-            Manage, reorder, and customize your portfolio projects
-          </p>
+        {/* Header with Unlock Badge */}
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-2">
+              Project Builder
+            </h1>
+            <p className="text-gray-600">
+              Manage, reorder, and customize your portfolio projects
+            </p>
+          </div>
+          <div className="bg-green-100 text-green-700 px-4 py-2 rounded-full flex items-center gap-2">
+            <FaUnlock className="w-4 h-4" />
+            <span className="text-sm font-medium">Unlocked</span>
+          </div>
         </div>
 
         {/* Controls */}

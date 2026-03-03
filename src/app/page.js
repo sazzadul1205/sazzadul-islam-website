@@ -201,12 +201,12 @@ export default function Home() {
       try {
         // Add cache control headers
         const [projectsRes, aboutRes] = await Promise.all([
-          fetch("/APIs/Projects", {
+          fetch("/api/Projects", {
             headers: {
               "Cache-Control": "max-age=3600",
             },
           }),
-          fetch("/APIs/About", {
+          fetch("/api/About", {
             headers: {
               "Cache-Control": "max-age=3600",
             },

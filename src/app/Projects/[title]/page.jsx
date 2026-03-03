@@ -58,7 +58,7 @@ const ProjectDetailsPage = () => {
       try {
         const decodedTitle = decodeURIComponent(title);
         const res = await fetch(
-          `/APIs/Projects?title=${encodeURIComponent(decodedTitle)}`
+          `/api/Projects?title=${encodeURIComponent(decodedTitle)}`
         );
 
         if (!res.ok) {
