@@ -82,29 +82,6 @@ const buttonVariants = {
   tap: { scale: 0.95 },
 };
 
-// New variants for image hover without expansion
-const imageVariants = {
-  hover: {
-    rotateY: 5,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
-  },
-};
-
-const textVariants = {
-  hover: {
-    x: 5,
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20,
-    },
-  },
-};
-
 const Projects = ({ projectsData }) => {
   const [showAll, setShowAll] = useState(false);
   const [hoveredProject, setHoveredProject] = useState(null);
@@ -142,11 +119,15 @@ const Projects = ({ projectsData }) => {
     );
   };
 
-  // Sort projects by 'view' property
+  // Sort projects by 'order' field (from Project Builder)
   const sortedProjects = [...projectsData].sort((a, b) => {
+    // If order exists, sort by it
+    if (typeof a.order === "number" && typeof b.order === "number") {
+      return a.order - b.order;
+    }
+    // Fallback to view count if order doesn't exist
     const aHasView = typeof a.view === "number";
     const bHasView = typeof b.view === "number";
-
     if (aHasView && bHasView) return a.view - b.view;
     if (aHasView) return -1;
     if (bHasView) return 1;
@@ -228,10 +209,10 @@ const Projects = ({ projectsData }) => {
               const direction = index % 2 === 0 ? "right" : "left";
               return (
                 <motion.div
-                  key={project.id || index}
+                  key={project._id || project.id || index}
                   custom={direction}
                   variants={cardVariants}
-                  onHoverStart={() => setHoveredProject(project.id)}
+                  onHoverStart={() => setHoveredProject(project._id || project.id)}
                   onHoverEnd={() => setHoveredProject(null)}
                   className="relative"
                 >
@@ -239,7 +220,7 @@ const Projects = ({ projectsData }) => {
                     project={project}
                     index={index}
                     isEven={index % 2 === 0}
-                    isHovered={hoveredProject === project.id}
+                    isHovered={hoveredProject === (project._id || project.id)}
                     likedProjects={likedProjects}
                     onLike={handleLike}
                   />
@@ -254,20 +235,20 @@ const Projects = ({ projectsData }) => {
                 const direction = actualIndex % 2 === 0 ? "right" : "left";
                 return (
                   <motion.div
-                    key={project.id || `extra-${index}`}
+                    key={project._id || project.id || `extra-${index}`}
                     custom={direction}
                     variants={cardVariants}
                     initial="hidden"
                     animate="visible"
                     exit={{ opacity: 0, x: -100 }}
-                    onHoverStart={() => setHoveredProject(project.id)}
+                    onHoverStart={() => setHoveredProject(project._id || project.id)}
                     onHoverEnd={() => setHoveredProject(null)}
                   >
                     <ProjectCard
                       project={project}
                       index={actualIndex}
                       isEven={actualIndex % 2 === 0}
-                      isHovered={hoveredProject === project.id}
+                      isHovered={hoveredProject === (project._id || project.id)}
                       likedProjects={likedProjects}
                       onLike={handleLike}
                     />
@@ -318,8 +299,8 @@ const Projects = ({ projectsData }) => {
         >
           {[
             { label: "Total Projects", value: projectsData.length, icon: FaCode },
-            { label: "Completed", value: projectsData.length, icon: FaStar },
-            { label: "In Progress", value: "2", icon: FaEye },
+            { label: "Completed", value: projectsData.filter(p => p.status === "Completed").length, icon: FaStar },
+            { label: "In Progress", value: projectsData.filter(p => p.status === "In Progress").length, icon: FaEye },
             { label: "Liked", value: likedProjects.length, icon: FaHeart },
           ].map((stat, i) => {
             const Icon = stat.icon;
@@ -352,7 +333,8 @@ const Projects = ({ projectsData }) => {
 
 // Fixed Project Card Component - No expansion on hover
 const ProjectCard = ({ project, index, isEven, isHovered, likedProjects, onLike }) => {
-  const isLiked = likedProjects.includes(project.id);
+  const isLiked = likedProjects.includes(project._id || project.id);
+  const projectId = project._id || project.id;
 
   return (
     <motion.div
@@ -414,7 +396,7 @@ const ProjectCard = ({ project, index, isEven, isHovered, likedProjects, onLike 
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={(e) => onLike(project.id, e)}
+            onClick={(e) => onLike(projectId, e)}
             className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg"
           >
             <FaHeart
@@ -423,7 +405,7 @@ const ProjectCard = ({ project, index, isEven, isHovered, likedProjects, onLike 
             />
           </motion.button>
 
-          {/* Project Number */}
+          {/* Project Number - Follows the order from Project Builder */}
           <motion.div
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -501,10 +483,15 @@ const ProjectCard = ({ project, index, isEven, isHovered, likedProjects, onLike 
         </div>
 
         {/* View Counter */}
-        {project.view && (
+        {project.view ? (
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <FaEye className="w-4 h-4" />
             <span>{project.view} views</span>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <FaCode className="w-4 h-4" />
+            <span>Order: #{typeof project.order === 'number' ? project.order + 1 : index + 1}</span>
           </div>
         )}
       </motion.div>

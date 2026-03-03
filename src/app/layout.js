@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "@/Shared/Navbar";
 import Footer from "@/Shared/Footer";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import Providers from "./providers"; // Import the Providers component
 
 // Font configs with display swap for better performance
 const geistSans = Geist({
@@ -18,7 +19,7 @@ const geistMono = Geist_Mono({
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["400", "600", "700"], // Added 700 for headings
+  weight: ["400", "600", "700"],
   variable: "--font-poppins",
   display: "swap",
 });
@@ -77,7 +78,7 @@ export const metadata = {
     siteName: "Sazzadul Islam Portfolio | MERN & Laravel Developer",
     images: [
       {
-        url: "/og-image.png", // Make sure this exists
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "Sazzadul Islam - Full Stack Web Developer specializing in MERN and Laravel",
@@ -92,9 +93,9 @@ export const metadata = {
     title: "Sazzadul Islam | Full Stack Web Developer (MERN & Laravel)",
     description:
       "Full stack web developer specializing in MERN stack (MongoDB, Express, React, Node.js) and Laravel (PHP, MySQL).",
-    images: ["/og-image.png"], // Optional: separate Twitter image
-    creator: "@sazzadu84352084", // Replace with your actual handle
-    site: "@sazzadu84352084", // Replace with your actual handle
+    images: ["/og-image.png"],
+    creator: "@sazzadu84352084",
+    site: "@sazzadu84352084",
   },
 
   robots: {
@@ -134,7 +135,7 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
-  // Structured data for better SEO - Updated with Laravel/PHP skills
+  // Structured data for better SEO
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -189,7 +190,7 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* Optional: Add additional structured data for skills */}
+        {/* Additional structured data for skills */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -241,12 +242,15 @@ export default function RootLayout({ children }) {
 
         <Navbar />
 
-        <main
-          id="main-content"
-          className="flex-grow bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300"
-        >
-          {children}
-        </main>
+        {/* Wrap everything with Providers */}
+        <Providers>
+          <main
+            id="main-content"
+            className="flex-grow bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300"
+          >
+            {children}
+          </main>
+        </Providers>
 
         <Footer />
       </body>
