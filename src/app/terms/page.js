@@ -12,6 +12,7 @@ import {
   FiCode,
   FiMail,
   FiChevronRight,
+  FiChevronLeft,
 } from "react-icons/fi";
 
 const TermsOfService = () => {
@@ -93,12 +94,27 @@ const TermsOfService = () => {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-30 px-4 sm:px-6 lg:px-8"
+      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-30 px-4 sm:px-6 lg:px-8 relative"
     >
+      {/* Back Button */}
+      <motion.div
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.95 }}
+        className="absolute top-30 left-6"
+      >
+        <Link
+          href="/"
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-full shadow-lg hover:shadow-xl border border-transparent font-semibold transition-all duration-300"
+        >
+          <FiChevronLeft className="w-5 h-5" />
+          Back
+        </Link>
+      </motion.div>
+
       {/* Background Decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-72 h-72 bg-orange-100 rounded-full filter blur-3xl opacity-20" />
-        <div className="absolute bottom-20 left-10 w-96 h-96 bg-yellow-100 rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-green-100 rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-100 rounded-full filter blur-3xl opacity-20" />
       </div>
 
       <div className="max-w-4xl mx-auto relative z-10">

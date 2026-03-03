@@ -1,22 +1,68 @@
 "use client";
 
-import React, { useEffect } from "react";
-
-// Import Next.js components
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-
-import AOS from "aos";
-import "aos/dist/aos.css";
-
-// Packages
 import { Tooltip } from "react-tooltip";
+import {
+  FiMail,
+  FiDownload,
+  FiExternalLink
+} from "react-icons/fi";
 
-// Custom Components
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 12,
+    },
+  },
+};
+
+const skillVariants = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: (i) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 12,
+      delay: i * 0.05,
+    },
+  }),
+  hover: {
+    scale: 1.1,
+    y: -5,
+    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+    },
+  },
+};
+
 const renderAboutDescription = (descArray) =>
   descArray.map((item, i) => {
     if (typeof item === "string") {
-      // Replace \n\n with <br/><br/>
       const parts = item.split("\n\n");
       return parts.map((part, idx) => (
         <React.Fragment key={`${i}-${idx}`}>
@@ -36,135 +82,318 @@ const renderAboutDescription = (descArray) =>
           className = "text-black font-semibold";
           break;
         case "blueUnderlineHover":
-          className = "text-blue-600 hover:scale-105 underline cursor-pointer";
+          className = "text-blue-600 hover:scale-105 underline cursor-pointer inline-block transition-transform";
           break;
         case "pinkUnderline":
           className = "text-pink-500 underline cursor-pointer";
           break;
       }
       return (
-        <span key={i} className={className}>
+        <motion.span
+          key={i}
+          className={className}
+          whileHover={item.style === "blueUnderlineHover" ? { scale: 1.1 } : {}}
+        >
           {item.text}
-        </span>
+        </motion.span>
       );
     }
   });
 
 const About = ({ aboutData }) => {
-  // Initialize AOS for animations
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = React.useRef(null);
+
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      disable: () => window.innerWidth < 768, // disable on mobile view
-    });
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: "50px" }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
-  
+  const handleContactClick = () => {
+    document.getElementById("contacts")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleDownloadResume = () => {
+    // Add your resume download logic here
+    window.open("/resume.pdf", "_blank");
+  };
+
   return (
-    <div className="bg-gray-200/80 min-h-screen px-4 sm:px-6 lg:px-8 py-12">
-      {/* Title */}
-      <h3
-        className="uppercase text-center font-semibold font-poppins text-black text-3xl sm:text-4xl mb-2"
-        data-aos="zoom-in"
-      >
-        {aboutData?.title || "About Me"}
-      </h3>
+    <motion.section
+      ref={sectionRef}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={containerVariants}
+      className="relative bg-gradient-to-b from-gray-100 to-gray-200/80 min-h-screen px-4 sm:px-6 lg:px-8 py-16 overflow-hidden"
+    >
+      {/* Background Decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 90, 0],
+            opacity: [0.1, 0.2, 0.1],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute top-20 right-20 w-64 h-64 bg-blue-200 rounded-full filter blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.3, 1],
+            rotate: [0, -90, 0],
+            opacity: [0.1, 0.15, 0.1],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute bottom-20 left-20 w-80 h-80 bg-indigo-200 rounded-full filter blur-3xl"
+        />
+      </div>
 
-      {/* Divider */}
-      <div
-        className="w-10 h-1 bg-blue-500 mx-auto rounded-full mb-6"
-        data-aos="zoom-in"
-        data-aos-delay="100"
-      />
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Title Section */}
+        <motion.div variants={itemVariants} className="text-center mb-12">
+          <motion.h3
+            variants={itemVariants}
+            className="uppercase font-bold font-poppins text-black text-4xl md:text-5xl mb-4"
+          >
+            {aboutData?.title || "About Me"}
+          </motion.h3>
 
-      {/* Intro Description */}
-      <p
-        className="text-center text-base sm:text-lg leading-7 sm:leading-8 max-w-3xl mx-auto text-gray-700 font-poppins"
-        data-aos="fade-up"
-        data-aos-delay="200"
-      >
-        {aboutData?.description || ""}
-      </p>
+          <motion.div
+            variants={itemVariants}
+            className="w-20 h-1 bg-gradient-to-r from-blue-500 to-indigo-600 mx-auto rounded-full"
+          />
+        </motion.div>
 
-      {/* Main Content */}
-      <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 max-w-7xl mx-auto mt-20 md:mt-10 text-black">
-        {/* Left Column - Description */}
-        <div
-          className="lg:w-1/2 space-y-4"
-          data-aos="fade-right"
-          data-aos-delay="300"
+        {/* Intro Description */}
+        <motion.p
+          variants={itemVariants}
+          className="text-center text-lg md:text-xl leading-relaxed max-w-4xl mx-auto text-gray-700 font-poppins mb-16"
         >
-          <h2 className="text-2xl text-center md:text-left font-semibold font-poppins">
-            Get to know me!
-          </h2>
+          {aboutData?.description || ""}
+        </motion.p>
 
-          <p className="text-base sm:text-lg text-center md:text-left text-gray-700 font-poppins">
-            {renderAboutDescription(aboutData.aboutDescription)}
-          </p>
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+          {/* Left Column - Description */}
+          <motion.div
+            variants={itemVariants}
+            className="lg:w-1/2 space-y-6"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-3xl md:text-4xl font-bold font-poppins text-gray-800 relative"
+            >
+              Get to know me!
+              <motion.div
+                className="absolute -bottom-2 left-0 w-16 h-1 bg-blue-500 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: 64 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+              />
+            </motion.h2>
 
-          <div className="flex flex-col sm:flex-row sm:items-center gap-5 pt-5">
-            <button className="px-10 py-3 bg-gradient-to-bl hover:bg-gradient-to-tr from-blue-500 to-blue-700 text-white font-medium rounded-xl uppercase text-md cursor-pointer">
-              Contact
-            </button>
+            <motion.div
+              variants={itemVariants}
+              className="text-gray-700 text-lg leading-relaxed space-y-4"
+            >
+              {renderAboutDescription(aboutData?.aboutDescription)}
+            </motion.div>
+
+            <motion.div
+              variants={itemVariants}
+              className="flex flex-col sm:flex-row items-center gap-5 pt-6"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleContactClick}
+                className="group relative px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl text-lg shadow-lg overflow-hidden"
+              >
+                <motion.span
+                  className="absolute inset-0 bg-white/20"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.5 }}
+                />
+                <span className="relative flex items-center gap-2">
+                  <FiMail className="w-5 h-5" />
+                  Contact Me
+                </span>
+              </motion.button>
+            </motion.div>
 
             {/* Social Links */}
-            <div className="flex mx-auto md:mx-0 flex-wrap gap-3">
-              {aboutData?.socialLinks?.map(({ id, href, tooltip, src }) => (
-                <React.Fragment key={id}>
-                  <Link
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    id={id}
+            <motion.div
+              variants={itemVariants}
+              className="flex items-center gap-4 pt-4"
+            >
+              <span className="text-gray-500 font-medium">Follow me:</span>
+              <div className="flex gap-3">
+                {aboutData?.socialLinks?.map(({ id, href, tooltip, src }, index) => (
+                  <motion.div
+                    key={id}
+                    variants={skillVariants}
+                    custom={index}
+                    whileHover="hover"
                   >
-                    <Image
-                      src={src}
-                      alt={tooltip}
-                      className="hover:scale-110 transition-transform"
-                      width={40}
-                      height={40}
-                      priority
-                    />
-                  </Link>
-                  <Tooltip anchorSelect={`#${id}`} content={tooltip} />
-                </React.Fragment>
+                    <Link
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      id={id}
+                      className="block"
+                    >
+                      <Image
+                        src={src}
+                        alt={tooltip}
+                        width={45}
+                        height={45}
+                        className="rounded-lg shadow-md hover:shadow-xl transition-all"
+                      />
+                    </Link>
+                    <Tooltip anchorSelect={`#${id}`} content={tooltip} />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Right Column - Skills */}
+          <motion.div
+            variants={itemVariants}
+            className="lg:w-1/2 space-y-6"
+          >
+            <motion.h2
+              variants={itemVariants}
+              className="text-3xl md:text-4xl font-bold font-poppins text-gray-800 relative"
+            >
+              My Skills
+              <motion.div
+                className="absolute -bottom-2 left-0 w-16 h-1 bg-indigo-500 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: 64 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+              />
+            </motion.h2>
+
+            <motion.p
+              variants={itemVariants}
+              className="text-gray-600 text-lg"
+            >
+              Technologies I've mastered while building full-stack applications:
+            </motion.p>
+
+            <motion.div
+              variants={containerVariants}
+              className="flex flex-wrap gap-3"
+            >
+              {aboutData?.skills?.map((skill, i) => (
+                <motion.span
+                  key={skill}
+                  custom={i}
+                  variants={skillVariants}
+                  whileHover="hover"
+                  className="group relative px-5 py-3 bg-white text-gray-700 text-base font-medium rounded-lg shadow-md cursor-pointer overflow-hidden"
+                >
+                  {/* Skill background effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600"
+                    initial={{ y: "100%" }}
+                    whileHover={{ y: 0 }}
+                    transition={{ duration: 0.3 }}
+                  />
+
+                  {/* Skill text */}
+                  <span className="relative z-10 group-hover:text-white transition-colors duration-300">
+                    {skill}
+                  </span>
+
+                  {/* Skill icon indicator */}
+                  <motion.span
+                    className="absolute top-1 right-1 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    initial={{ rotate: -90 }}
+                    whileHover={{ rotate: 0 }}
+                  >
+                    <FiExternalLink className="w-3 h-3" />
+                  </motion.span>
+                </motion.span>
               ))}
-            </div>
-          </div>
-        </div>
+            </motion.div>
 
-        {/* Right Column - Skills */}
-        <div
-          className="lg:w-1/2 space-y-4"
-          data-aos="fade-left"
-          data-aos-delay="300"
-        >
-          {/* Title */}
-          <h2 className="text-2xl text-center md:text-left font-semibold font-poppins">
-            My Skills
-          </h2>
-
-          {/* Description */}
-          <p className="text-base sm:text-lg text-center md:text-left text-gray-700 font-poppins">
-            Technologies I’ve worked with while learning full stack development:
-          </p>
-
-          <div className="flex flex-wrap gap-3 sm:gap-4">
-            {aboutData?.skills?.map((skill, i) => (
-              <span
-                key={skill}
-                className="group relative px-4 py-3 bg-white text-gray-700 text-sm sm:text-base font-medium rounded-md shadow hover:shadow-lg transition duration-300 cursor-pointer"
-                data-aos="zoom-in-up"
-                data-aos-delay={i * 100}
+            {/* Skill Categories */}
+            <motion.div
+              variants={itemVariants}
+              className="mt-8 grid grid-cols-2 gap-4"
+            >
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200"
               >
-                {skill}
-              </span>
-            ))}
-          </div>
+                <h4 className="font-semibold text-blue-600 mb-2">Frontend</h4>
+                <p className="text-sm text-gray-600">React, Next.js, Vue, Tailwind</p>
+              </motion.div>
+              <motion.div
+                whileHover={{ y: -5 }}
+                className="p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-gray-200"
+              >
+                <h4 className="font-semibold text-indigo-600 mb-2">Backend</h4>
+                <p className="text-sm text-gray-600">Node.js, Laravel, PHP, MySQL</p>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
+
+        {/* Stats Section */}
+        <motion.div
+          variants={itemVariants}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-8 border-t border-gray-300"
+        >
+          {[
+            { label: "Projects Completed", value: "20+" },
+            { label: "Technologies", value: "15+" },
+            { label: "Happy Clients", value: "10+" },
+            { label: "Years Experience", value: "3+" },
+          ].map((stat, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 + i * 0.1 }}
+              className="text-center"
+            >
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                className="text-3xl font-bold text-blue-600 mb-1"
+              >
+                {stat.value}
+              </motion.div>
+              <div className="text-sm text-gray-500">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
-    </div>
+    </motion.section>
   );
 };
 

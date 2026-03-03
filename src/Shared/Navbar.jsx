@@ -46,10 +46,11 @@ const mobileMenuItemVariants = {
 };
 
 const Navbar = () => {
-  const [activeLink, setActiveLink] = useState("#home");
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("#home");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   // Handle scroll effects
   useEffect(() => {
@@ -75,6 +76,21 @@ const Navbar = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Handle Scroll Progress
+  useEffect(() => {
+    const handleScrollProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScrollProgress);
+    handleScrollProgress(); // initialize on mount
+
+    return () => window.removeEventListener("scroll", handleScrollProgress);
   }, []);
 
   // Close mobile menu when clicking outside
@@ -111,8 +127,8 @@ const Navbar = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className={`navbar fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-          : "bg-white/80 backdrop-blur-sm shadow-sm py-4"
+        ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
+        : "bg-white/80 backdrop-blur-sm shadow-sm py-4"
         } text-black px-4 md:px-8`}
     >
       <div className="flex items-center justify-between w-full">
@@ -253,8 +269,8 @@ const Navbar = () => {
                     href={href}
                     onClick={(e) => handleSmoothScroll(e, href)}
                     className={`block py-3 px-4 rounded-lg transition-all duration-300 ${activeLink === href
-                        ? "bg-blue-50 text-blue-600 pl-6 border-l-4 border-blue-600"
-                        : "text-gray-700 hover:bg-gray-50 hover:pl-6"
+                      ? "bg-blue-50 text-blue-600 pl-6 border-l-4 border-blue-600"
+                      : "text-gray-700 hover:bg-gray-50 hover:pl-6"
                       }`}
                   >
                     {name}
@@ -283,8 +299,8 @@ const Navbar = () => {
       {/* Progress bar for scroll position */}
       <motion.div
         className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-indigo-600"
-        style={{ width: `${(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100}%` }}
-        animate={{ width: `${(window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100}%` }}
+        style={{ width: `${scrollProgress}%` }}
+        animate={{ width: `${scrollProgress}%` }}
         transition={{ duration: 0.1 }}
       />
     </motion.nav>
